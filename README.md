@@ -1,8 +1,8 @@
 # ie0217-Proyecto
 # Miembros del equipo
-- Luis Brenes Campos - C21324
 - Emmanuel Aviles Ramirez - C20883 
-- 
+- Luis Brenes Campos - C21324
+- Brenda Castro Jiménez - C21904
 # Profesor
 Rafael Esteban Badilla Alvarado
 
@@ -10,7 +10,7 @@ Rafael Esteban Badilla Alvarado
 
 ## ¿Qué es un préstamo?
 
-Un préstamo consiste en el proceso donde un ente o persona denominada acreedor, presta dinero a una persona denominada deudor. La persona deudora se compromete en un tiempo determinado a devolver el dinero prestado. La mayoría del tiempo este pago del préstamo conlleva también un pago de intereses.[1]
+Un préstamo consiste en el proceso donde un ente o persona denominada acreedor, presta dinero a una persona denominada deudor. La persona deudora se compromete en un tiempo determinado a devolver el dinero prestado. La mayoría del tiempo este pago del préstamo conlleva también un pago de intereses.
 
 El préstamo posee 3 aspectos principales:
 
@@ -22,15 +22,15 @@ Tasa de interés: porcentaje extra que la persona deudora debe pagar al acreedor
 
 Dependiendo del objetivo del préstamo que necesite el deudor, este puede ser de diferentes tipos. Los tres tipos que nos compete para este trabajo son:
 
-Prendarios: los deudores reciben un préstamo dejando como garantía una pertenencia (electrodoméstico, automóvil, joyas, etc). [1]
-Hipotecario: son utilizados para adquirir, remodelar o construir una casa o edificio, dejando como garantía un inmueble. [1]
+Prendarios: los deudores reciben un préstamo dejando como garantía una pertenencia (electrodoméstico, automóvil, joyas, etc).
+Hipotecario: son utilizados para adquirir, remodelar o construir una casa o edificio, dejando como garantía un inmueble.
 Personal: préstamo realizado para asuntos personas. Las condiciones son las normales mencionadas anteriormente.
 
-Dependiendo del tipo de préstamo, existen términos y condiciones específicas [2]:
+Dependiendo del tipo de préstamo, existen términos y condiciones específicas:
 
 | Tipo de Préstamo  | Plazo                  | Tasa de Interés       |
 |------------------- |------------------------|-----------------------|
-| Préstamos Prendarios| 6 meses a 5 años       | 43%                   |
+| Préstamos Prendarios| 6 meses a 5 años       | 9% - 15%                   |
 | Préstamos Personales| 72 a 84 meses          | 5% - 36%              |
 | Préstamos Hipotecarios| 10, 15, 20 o 30 años  | 3% - 5%               |
 
@@ -118,4 +118,6 @@ Sin embargo, los *CDP* Son generalmente considerados los mejores tipos de invers
 
 4. Los 5 Mejores Certificados de Deposito con intereses en el 2020| Tasas de intereses de un CD 2020 [Youtube](https://www.youtube.com/watch?v=9Zry16X6mXo)
 
+5. Cpnsolidated Credit. Calculadora de Préstamos [ConsolidatedCredit](https://www.consolidatedcredit.org/es/calculadoras/calculadora-de-prestamos/)
 
+6. MoneyAdventure. 5. Tipos de prestamo [Youtube](https://www.youtube.com/watch?v=3MNnXSQK5Rk)
