@@ -151,3 +151,5 @@ Sin embargo, los *CDP* Son generalmente considerados los mejores tipos de invers
 5. Cpnsolidated Credit. Calculadora de Préstamos [ConsolidatedCredit](https://www.consolidatedcredit.org/es/calculadoras/calculadora-de-prestamos/)
 
 6. MoneyAdventure. 5. Tipos de prestamo [Youtube](https://www.youtube.com/watch?v=3MNnXSQK5Rk)
+
+7. Punto_y_ Aparte Contabilidad. "Cómo Calcular los Intereses de un Préstamo: Guía Paso a Paso y Ejemplos Prácticos" [Youtube](https://www.youtube.com/watch?v=k90VrMIpzGk)
