@@ -137,6 +137,9 @@ Los periodos de los *CDP* suelen ser de:
 
 Sin embargo, los *CDP* Son generalmente considerados los mejores tipos de inversiones dado a su seguridad y su gran respaldo por medio de garantías emitidas por bancos y entidades financieras.
 
+# Cronograma de trabajo
+
+![Cronograma](https://github.com/emmanuelavilesucr/ie0217-proyecto/blob/main/Im%C3%A1genes/Cronograma.Proyecto.IE0217.png)
 
 ## Bibliografía:
 
