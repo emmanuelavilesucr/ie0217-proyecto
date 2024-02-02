@@ -34,6 +34,36 @@ Dependiendo del tipo de préstamo, existen términos y condiciones específicas:
 | Préstamos Personales| 72 a 84 meses          | 5% - 36%              |
 | Préstamos Hipotecarios| 10, 15, 20 o 30 años  | 3% - 5%               |
 
+## Fórmulas importantes
+
+Basandonos en los valor del monto del préstamo, tada de interés anual y plazo del pago representado por meses, podemos calcular las fórmulas más importantes.
+
+### Interés mensual
+
+$$
+r = \frac{TIA}{12} 
+$$
+
+Donde: 
+- \( r \) es la tasa de interés mensual, y
+- \( TIA \) es la tasa de interés anual.
+
+Cabe destacar que los valores deben estar en decimales y no en valores porcentuales. Si estan en valores porcentuales, se debe divir por 100 el resultado.
+
+### Cuota mensual
+
+$$
+C = \frac{P \times r \times (1+r)^n}{(1+r)^n-1}
+$$
+
+Donde:
+- \( C \) es la cuota mensual,
+- \( P \) es el monto del préstamo (principal),
+- \( r \) es la tasa de interés mensual, y
+- \( n \) es el número total de pagos (cuotas).
+
+El resto de fórmulas referentes al cálculo de los préstamos son variantes de las dos mencionadas anteriormente.
+
 ## Formas de pagar los intereses en un préstamo o inversión.
 
 ### Intereses al vencimiento
