@@ -5,13 +5,19 @@
 
 class Interfaz:
     
-    def crear_cuenta():
+    def __init__(self):
+        self.clientes = Clientes()
+        self.cuentas_bancarias = CuentasBancarias()
+        self.prestamos = Prestamos()
+        self.informacion_clientes = InformacionClientes()
+    
+    def crear_cuenta(self, tipo_cuenta, cliente_id):
         # Codigo 
     
-    def solicitar_cuenta():
+    def solicitar_cuenta(self):
         # Codigo 
         
-    def solicitar_prestamo():
+    def solicitar_prestamo(self):
         # Codigo
         
     def informacion():
