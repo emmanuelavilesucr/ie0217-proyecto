@@ -16,11 +16,11 @@ public:
     }
 
     void crear_cuenta(int tipo_cuenta, int cliente_id) {
-       
+       // Primero terminar codigo de la clase clientes
     }
 
     void solicitar_cuenta() {
-        
+      // Primero terminar codigo de la clase clientes
     }
 
     void solicitar_prestamo() {
