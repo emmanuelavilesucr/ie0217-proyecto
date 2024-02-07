@@ -1,34 +1,29 @@
-// #include "Clientes.hpp"
-// #include "CuentasBancarias.hpp"
-// #include "Prestamos.hpp"
-// #include "informacionClientes.hpp"
+#include "interfaz.hpp" 
 
-class Interfaz {
-private:
-    // Clientes clientes;
-    // CuentasBancarias cuentas_bancarias;
-    // Prestamos prestamos;
-    // InformacionClientes informacion_clientes;
+void Interfaz::menu_inicial(){
+    int opcion;
 
-public:
-    Interfaz() {
+    std::cout << "---Bienvenido al servicio administrativo del banco---" << std::endl;
+    std::cout << "1. Información al cliente" << std::endl;
+    std::cout << "2. Atención al cliente" << std::endl;
+    std::cout << "Ingrese el número de la modalidad a elegir: ";
+    
+    try{
+        std::cin >> opcion;
         
+        switch (opcion)
+        {
+        case 1:
+            std::cout << "Se ha elegido la opcion 1" << std::endl;
+            break;
+        case 2:
+            std::cout << "Se ha elegido la opcion 2" << std::endl;
+            break;
+        default:
+            throw std::runtime_error("La opción elegida no esta disponible.");
+        }
+    }catch (std::exception& e){
+        std::cerr << "Error detectado: " << e.what() << std::endl;
     }
-
-    void crear_cuenta(int tipo_cuenta, int cliente_id) {
-       // Primero terminar codigo de la clase clientes
-    }
-
-    void solicitar_cuenta() {
-      // Primero terminar codigo de la clase clientes
-    }
-
-    void solicitar_prestamo() {
-        
-    }
-
-    void informacion() {
-        
-    }
-};
+}
 
