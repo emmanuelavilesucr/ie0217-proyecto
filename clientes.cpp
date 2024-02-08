@@ -1,31 +1,22 @@
+#include "clientes.hpp"
 #include <iostream>
 #include <fstream> // Header encargado de la manipulacion de archivos .txt
-#include <string>
 
 // Se deben agregar manejos de excepciones de los datos float y strings
 
-class Clientes {
-    private:
-        long long int id_cliente;
-        std::string nombre;
+Clientes::Clientes(long long int id, const std::string& nombre) : cliente_id(id), nombre(nombre) {}
 
-    public:
-        Clientes(long long int id,const std::string& nombre) : id_cliente(id), nombre(nombre) {} 
-        
-        
-    void generar_txt() const {
-        std::cout << "ID del Cliente: " << id_cliente << ", Nombre: " << nombre << std::endl;
+void Clientes::mostrarYGuardarInformacion() const {
+    std::cout << "ID del Cliente: " << cliente_id << ", Nombre: " << nombre << std::endl;
 
-        std::ofstream archivo("clientes.txt", std::ios::app);
-        if (archivo.is_open()) {
-            archivo << id_cliente << "," << nombre << std::endl;
-            archivo.close();
-        } else {
-            std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
-        }
+    std::ofstream archivo("clientes.txt", std::ios::app);
+    if (archivo.is_open()) {
+        archivo << cliente_id << "," << nombre << std::endl;
+        archivo.close();
+    } else {
+        std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
     }
-
-};
+}
 
 
 // Funcion main provicional(testeo de la clase)
@@ -41,7 +32,7 @@ int main(){
     std::getline(std::cin, nombre);
 
     Clientes cliente(id, nombre);
-    cliente.generar_txt();
+    cliente.mostrarYGuardarInformacion();
     return 0;
 
 }
