@@ -1,14 +1,13 @@
 #include "clientes.hpp"
 #include <iostream>
 #include <fstream> // Header encargado de la manipulacion de archivos .txt
-
-// Se deben agregar manejos de excepciones de los datos float y strings
+#include <limits> // Header encargado de los limites numericos 
 
 Clientes::Clientes(long long int id, const std::string& nombre) : cliente_id(id), nombre(nombre) {}
 
-void Clientes::mostrarYGuardarInformacion() const {
-    std::cout << "ID del Cliente: " << cliente_id << ", Nombre: " << nombre << std::endl;
+void Clientes::GuardarInformacion() const {
 
+    std::cout << "ID del Cliente: " << cliente_id << ", Nombre: " << nombre << std::endl;
     std::ofstream archivo("clientes.txt", std::ios::app);
     if (archivo.is_open()) {
         archivo << cliente_id << "," << nombre << std::endl;
@@ -20,19 +19,29 @@ void Clientes::mostrarYGuardarInformacion() const {
 
 
 // Funcion main provicional(testeo de la clase)
-int main(){
-
+int main() {
     long long int id;
     std::string nombre;
-    std::cout << "Ingrese el ID: ";
-    std::cin >> id;
+    
+    do {
+        std::cout << "Ingrese el ID: ";
+        std::cin >> id;
+
+        if (id < 0 || id > 999999999) {
+            std::cerr << "El ID debe tener un maximo de 9 digitos. Vuelva a intenterlo....." << std::endl;
+            std::cin.clear(); 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+        } else {
+            break; 
+        }
+    } while (true);
 
     std::cout << "Ingrese nombre: ";
     std::cin.ignore();  
     std::getline(std::cin, nombre);
 
     Clientes cliente(id, nombre);
-    cliente.mostrarYGuardarInformacion();
-    return 0;
+    cliente.GuardarInformacion();
 
+    return 0;
 }

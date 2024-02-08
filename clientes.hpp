@@ -8,8 +8,8 @@ private:
     std::string nombre;
 
 public:
-    Clientes(long long int id, const std::string& nombre); // Constructor
-    void mostrarYGuardarInformacion() const;
+    Clientes(long long int id, const std::string& nombre); 
+    void GuardarInformacion() const;
 };
 
 #endif
