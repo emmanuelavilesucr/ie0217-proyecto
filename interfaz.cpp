@@ -6,6 +6,7 @@ void Interfaz::menu_atencion_clientes(){
     std::cout << "---Opciones para la atención al cliente---" << std::endl;
     std::cout << "1. Acceder a una cuenta creada" << std::endl;
     std::cout << "2. Crear una cuenta" << std::endl;
+    std::cout << "3. Salir de las opciones de atención" << std::endl;
     std::cout << "Ingrese el número de una opción: ";
 
     std::cin >> opcion_cliente;
@@ -18,7 +19,9 @@ void Interfaz::menu_atencion_clientes(){
             break;
         case 2:
             std::cout << "Opcion 2";
-            //Incoar la opcion de elegir un usuario y las acciones que puede realizar
+            //Iniciar la opcion de elegir un usuario y las acciones que puede realizar
+            break;
+        case 3:
             break;
         default:
             throw std::runtime_error("La opción elegida no esta disponible.");
@@ -32,6 +35,7 @@ void Interfaz::menu_inicial(){
     std::cout << "---Bienvenido al servicio administrativo del banco---" << std::endl;
     std::cout << "1. Información al cliente" << std::endl;
     std::cout << "2. Atención al cliente" << std::endl;
+    std::cout << "3. Salir del prorgama" << std::endl;
     std::cout << "Ingrese el número de la modalidad a elegir: ";
     
     try{
@@ -45,6 +49,9 @@ void Interfaz::menu_inicial(){
         case 2:
             menu_atencion_clientes();
             break;
+        case 3:
+            std::cout << "Saliendo del prorgama..." << std::endl;
+            exit(0);
         default:
             throw std::runtime_error("La opción elegida no esta disponible.");
         }
