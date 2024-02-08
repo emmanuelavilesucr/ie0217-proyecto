@@ -1,9 +1,33 @@
 #include "interfaz.hpp" 
 
+bool Interfaz::crearCuentaVerificarRepetidos(long long int cedula){
+    
+    std::ifstream archivo_entrada("clientes.txt");
+
+    if (archivo_entrada.is_open()) {
+        long long int id;
+        std::string nombre_usuario;
+
+        while (archivo_entrada >> id >> std::ws && std::getline(archivo_entrada, nombre_usuario)) {
+            if (id == cedula){
+                std::cout << "La cédula indicada ya pertenece a otra persona" <<  std::endl;
+                std::cout << "Intente otra vez..." << std::endl;
+                return false;
+            }
+        }
+        archivo_entrada.close();
+        return true;
+    } else {
+        std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
+    }
+
+    return false;
+}
+
 void Interfaz::crearCuentaVerificarExpresiones(){
     try{
         std::string nombre;
-        std::string cedula;
+        std::string cedula_expresion;
         auto const regex_nombre = std::regex("^[A-ZÑÁ-Ú][a-zñá-ú]{1,20}(( )([A-ZÑÁ-Ú][a-zñá-ú]{1,20})){0,3}$");
         auto const regex_id = std::regex("^[0-9]{9}$");
         std::cin.ignore();
@@ -13,14 +37,20 @@ void Interfaz::crearCuentaVerificarExpresiones(){
             getline(std::cin, nombre);
 
             std::cout << "Ingrese su cédula: ";
-            getline(std::cin, cedula);;
+            getline(std::cin, cedula_expresion);;
 
             bool verificar_nombre = std::regex_match(nombre, regex_nombre);
-            bool verificar_cedula = std::regex_match(cedula, regex_id);
+            bool verificar_cedula = std::regex_match(cedula_expresion, regex_id);
 
             if (verificar_nombre == true && verificar_cedula == true){
-                std::cout << "El nombre y cedula se pueden usar" << std::endl;
-                break;
+                long long int cedula = std::stoll(cedula_expresion);
+                bool verificado = crearCuentaVerificarRepetidos(cedula);
+                if  (verificado == true){
+                    //Crear una instancia de tipo cliente, pasarle la cedula y nombre
+                    //Agregarlo al .txt
+                    std::cout << "Su cuenta ha sido creada" << std::endl;
+                    break;
+                }
 
             }else if (verificar_nombre == false && verificar_cedula == false) {
                 std::cout << "Lo sentimos, su nombre y cédula no cumplen con las normas establecidas:" << std::endl;

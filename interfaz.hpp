@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <regex>
+#include <fstream>
 
 class Interfaz {
 private:
@@ -20,6 +21,8 @@ private:
 
       void crearCuentaVerificarExpresiones();
         // Primero terminar codigo de la clase clientes
+
+      bool crearCuentaVerificarRepetidos(long long int cedula);
 
       void solicitarCuenta();
         // Primero terminar codigo de la clase clientes
