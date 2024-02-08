@@ -16,32 +16,3 @@ void Clientes::GuardarInformacion() const {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
     }
 }
-
-
-// Funcion main provicional(testeo de la clase)
-int main() {
-    long long int id;
-    std::string nombre;
-    
-    do {
-        std::cout << "Ingrese el ID: ";
-        std::cin >> id;
-
-        if (id < 0 || id > 999999999) {
-            std::cerr << "El ID debe tener un maximo de 9 digitos. Vuelva a intenterlo....." << std::endl;
-            std::cin.clear(); 
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-        } else {
-            break; 
-        }
-    } while (true);
-
-    std::cout << "Ingrese nombre: ";
-    std::cin.ignore();  
-    std::getline(std::cin, nombre);
-
-    Clientes cliente(id, nombre);
-    cliente.GuardarInformacion();
-
-    return 0;
-}
