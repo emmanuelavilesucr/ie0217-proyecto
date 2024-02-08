@@ -6,6 +6,7 @@
 // #include "informacionClientes.hpp"
 #include <iostream>
 #include <stdexcept>
+#include <regex>
 
 class Interfaz {
 private:
@@ -15,20 +16,20 @@ private:
     // Prestamos prestamos;
     // InformacionClientes informacion_clientes;
 
-      void menu_atencion_clientes();
+      void menuAtencionClientes();
 
-      void crear_cuenta(int tipo_cuenta, int cliente_id);
+      void crearCuentaVerificarExpresiones();
         // Primero terminar codigo de la clase clientes
 
-      void solicitar_cuenta();
+      void solicitarCuenta();
         // Primero terminar codigo de la clase clientes
 
-      void solicitar_prestamo();
+      void solicitarPrestamo();
 
       void informacion();
 public:
 
-    void menu_inicial();
+    void menuInicial();
   
 };
 

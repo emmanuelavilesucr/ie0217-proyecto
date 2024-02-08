@@ -1,6 +1,56 @@
 #include "interfaz.hpp" 
 
-void Interfaz::menu_atencion_clientes(){
+void Interfaz::crearCuentaVerificarExpresiones(){
+    try{
+        std::string nombre;
+        std::string cedula;
+        auto const regex_nombre = std::regex("^[A-ZÑÁ-Ú][a-zñá-ú]{1,20}(( )([A-ZÑÁ-Ú][a-zñá-ú]{1,20})){0,3}$");
+        auto const regex_id = std::regex("^[0-9]{9}$");
+        std::cin.ignore();
+
+        while(true){
+            std::cout << "Ingrese su nombre: ";
+            getline(std::cin, nombre);
+
+            std::cout << "Ingrese su cédula: ";
+            getline(std::cin, cedula);;
+
+            bool verificar_nombre = std::regex_match(nombre, regex_nombre);
+            bool verificar_cedula = std::regex_match(cedula, regex_id);
+
+            if (verificar_nombre == true && verificar_cedula == true){
+                std::cout << "El nombre y cedula se pueden usar" << std::endl;
+                break;
+
+            }else if (verificar_nombre == false && verificar_cedula == false) {
+                std::cout << "Lo sentimos, su nombre y cédula no cumplen con las normas establecidas:" << std::endl;
+                std::cout << "1. El nombre debe estar compuesto de 1 a 4 palabras, compuesta de solo letras" << std::endl;
+                std::cout << "2. Cada palabra del nombre de poseer mayúscula al inicio y solo en esa posición" << std::endl;
+                std::cout << "3. La cédula debe estar compuesta por 9 números" << std::endl;
+                std::cout << "Intente otra vez..." << std::endl;
+
+            }else if (verificar_nombre == false) {
+                //En caso de ser erroneo el nombre, recordamos las reglas a seguir para que sea válido
+                std::cout << "Lo sentimos, su nombre no cumple con las normas establecidas:" << std::endl;
+                std::cout << "1. El nombre debe estar compuesto de 1 a 4 palabras, compuesta de solo letras" << std::endl;
+                std::cout << "2. Cada palabra de poseer mayúscula al inicio y solo en esa posición" << std::endl;
+                std::cout << "Intente otra vez..." << std::endl;
+
+            }else{
+                //En caso de ser erroneo la cédula, recordamos las reglas a seguir para que sea válido
+                std::cout << "Lo sentimos, su cédula no cumple con las normas establecidas:" << std::endl;
+                std::cout << "1. Debe estar compuesta por 9 números" << std::endl;
+                std::cout << "Intente otra vez..." << std::endl;
+            }
+        }
+        
+    }catch (...){
+        std::cout << "Error inesperado a la hora de crear la cuenta" << std::endl;
+    }
+}
+
+
+void Interfaz::menuAtencionClientes(){
     int opcion_cliente;
     
     std::cout << "---Opciones para la atención al cliente---" << std::endl;
@@ -18,8 +68,7 @@ void Interfaz::menu_atencion_clientes(){
             //Invocar funcionalidad para crear cuenta
             break;
         case 2:
-            std::cout << "Opcion 2";
-            //Iniciar la opcion de elegir un usuario y las acciones que puede realizar
+            crearCuentaVerificarExpresiones();
             break;
         case 3:
             break;
@@ -29,7 +78,7 @@ void Interfaz::menu_atencion_clientes(){
 
 }
 
-void Interfaz::menu_inicial(){
+void Interfaz::menuInicial(){
     int opcion;
 
     std::cout << "---Bienvenido al servicio administrativo del banco---" << std::endl;
@@ -47,7 +96,7 @@ void Interfaz::menu_inicial(){
             std::cout << "Se ha elegido la opcion 1" << std::endl;
             break;
         case 2:
-            menu_atencion_clientes();
+            menuAtencionClientes();
             break;
         case 3:
             std::cout << "Saliendo del prorgama..." << std::endl;
