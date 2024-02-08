@@ -37,20 +37,39 @@ std::vector<std::vector<float>> InfoCliente::calcularAmortizacion(){
 }
 
 void InfoCliente::generarReporte(std::string nombre){
-    
+    ofstream archivo;
+    archivo.open(nombre, ios::app);
+    if (archivo.fail()){
+        cout << "No se pudo abrir el archivo"<< endl;
+        exit(1);
+    }
+    archivo << "Cuota  Interés pendiente  Amortización  Saldo restante"<< endl;
+    for (int i = 0; i < amortizacion.size(); i++){
+        archivo << amortizacion[i][0] << "   " << amortizacion[i][1] << "   "<< amortizacion[i][2] << "   "<< amortizacion[i][3] << "   "<< endl;;
+    }
+    archivo.close();
+
 }
 
 void InfoCliente::menuPrincipal(){
-
-
+    std::cout << "\n --- Tipos de prestamos ---\n";
+    std::cout << " 1.Prestamo Prendario\n";
+    std::cout << " 2.Prestamo Hipotecario\n";
+    std::cout << " 3.Prestamo Personal\n";
+    std::cout << " 4.Reporte personalizado\n";
 }
 
-void InfoCliente::menuSecundario(){
-
+void InfoCliente::menuSecundario(std::string plazo1, std::string plazo2, std::string plazo3){
+    std::cout << "\n ---  Plazos preestablecidos ---\n";
+    std::cout << " 1. "<< plazo1 << "\n";
+    std::cout << " 2. "<< plazo2 << "\n";
+    std::cout << " 3. "<< plazo3 << "\n";
 }
 
 void InfoCliente::menuTerceario(){
-
+    std::cout << "\n --- ¿Desea generar un reporte? ---\n";
+    std::cout << " 1.Generar reporte\n";
+    std::cout << " 2.Salir\n";
 }
 
 void InfoCliente::procesarOpcion1(){

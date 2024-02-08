@@ -15,7 +15,7 @@ class InfoCliente {
         void generarReporte(std::string nombre);
         void menuPrincipal();
         void procesarOpcion1();
-        void menuSecundario();
+        void menuSecundario(std::string plazo1, std::string plazo2, std::string plazo3);
         void procesarOpcion2();
         void menuTerceario();
         void procesarOpcion3();
