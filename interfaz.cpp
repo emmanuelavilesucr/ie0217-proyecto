@@ -90,6 +90,50 @@ void Interfaz::crearCuentaVerificarExpresiones(){
 }
 
 
+bool Interfaz::verificarCuenta() {
+    std::string nombre;
+    long long int cedula;
+
+    std::cout << "Ingrese su cédula: ";
+    std::cin >> cedula;
+
+    std::ifstream archivo_entrada("clientes.txt");
+
+    if (archivo_entrada.is_open()) {
+        long long int id;
+        std::string nombre_usuario;
+        bool encontrado = false;
+
+        while (archivo_entrada >> id && std::getline(archivo_entrada, nombre_usuario)) {
+            if (id == cedula) {
+                encontrado = true;
+                archivo_entrada.close();
+        
+                size_t pos = nombre_usuario.find(',');
+                if (pos != std::string::npos) {
+                  
+                    std::string nombre = nombre_usuario.substr(pos + 1);
+                    std::cout << "La cedula ingresada pertenece a: " << nombre << std::endl;
+                } 
+                return false;
+            }
+        }
+
+        archivo_entrada.close();
+
+        if (!encontrado) {
+            std::cout << "La cedula ingresada no pertenece a ningun usuario" << std::endl;
+        }
+
+        return !encontrado;
+    } else {
+        std::cout << "Sistema fuera de servicio. No se puede acceder a la base de datos" << std::endl;
+    }
+
+    return false;
+}
+
+
 void Interfaz::menuAtencionClientes(){
     int opcion_cliente;
     
@@ -105,7 +149,7 @@ void Interfaz::menuAtencionClientes(){
         {
         case 1:
             std::cout << "Se ha elegido la opcion 1" << std::endl;
-            //Invocar funcionalidad para crear cuenta
+            verificarCuenta();
             break;
         case 2:
             crearCuentaVerificarExpresiones();
