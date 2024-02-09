@@ -1,13 +1,5 @@
 #ifndef INTERFAZ_HPP
 #define INTERFAZ_HPP
-// #include "Clientes.hpp"
-// #include "CuentasBancarias.hpp"
-// #include "Prestamos.hpp"
-// #include "informacionClientes.hpp"
-#include <iostream>
-#include <stdexcept>
-#include <regex>
-#include <fstream>
 
 class Interfaz {
 private:
@@ -30,6 +22,8 @@ private:
       void solicitarPrestamo();
 
       void informacion();
+
+      bool verificarCuenta();
 public:
 
     void menuInicial();

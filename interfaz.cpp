@@ -1,4 +1,13 @@
 #include "interfaz.hpp" 
+#include "clientes.hpp"
+// #include "CuentasBancarias.hpp"
+// #include "Prestamos.hpp"
+// #include "infoClientes.hpp"
+#include <iostream>
+#include <stdexcept>
+#include <regex>
+#include <fstream>
+#include <limits>
 
 bool Interfaz::crearCuentaVerificarRepetidos(long long int cedula){
     
@@ -46,8 +55,9 @@ void Interfaz::crearCuentaVerificarExpresiones(){
                 long long int cedula = std::stoll(cedula_expresion);
                 bool verificado = crearCuentaVerificarRepetidos(cedula);
                 if  (verificado == true){
-                    //Crear una instancia de tipo cliente, pasarle la cedula y nombre
-                    //Agregarlo al .txt
+
+                    Clientes clientes(cedula, nombre);
+                    cliente.GuardarInformacion();
                     std::cout << "Su cuenta ha sido creada" << std::endl;
                     break;
                 }
