@@ -87,45 +87,53 @@ void Interfaz::crearCuentaVerificarExpresiones(){
 
 bool Interfaz::verificarCuenta() {
     std::string nombre;
-    long long int cedula;
+    std::string cedula_str;
 
-    std::cout << "Ingrese su cédula: ";
-    std::cin >> cedula;
+    const std::regex regex_id("^[0-9]{9}$");
+
+    do {
+        std::cout << "Ingrese su cédula: ";
+        std::cin >> cedula_str;
+
+        if (!std::regex_match(cedula_str, regex_id)) {
+            std::cout << "Cédula inválida. Debe contener 9 dígitos numericos." << std::endl;
+        }
+    } while (!std::regex_match(cedula_str, regex_id));
+
+    long long int cedula = std::stoll(cedula_str);
 
     std::ifstream archivo_entrada("clientes.txt");
 
-    if (archivo_entrada.is_open()) {
-        long long int id;
-        std::string nombre_usuario;
-        bool encontrado = false;
-
-        while (archivo_entrada >> id && std::getline(archivo_entrada, nombre_usuario)) {
-            if (id == cedula) {
-                encontrado = true;
-                archivo_entrada.close();
-        
-                size_t pos = nombre_usuario.find(',');
-                if (pos != std::string::npos) {
-                  
-                    std::string nombre = nombre_usuario.substr(pos + 1);
-                    std::cout << "La cedula ingresada pertenece a: " << nombre << std::endl;
-                } 
-                return false;
-            }
-        }
-
-        archivo_entrada.close();
-
-        if (!encontrado) {
-            std::cout << "La cedula ingresada no pertenece a ningun usuario" << std::endl;
-        }
-
-        return !encontrado;
-    } else {
+    if (!archivo_entrada.is_open()) {
         std::cout << "Sistema fuera de servicio. No se puede acceder a la base de datos" << std::endl;
+        return false;
     }
 
-    return false;
+    long long int id;
+    std::string nombre_usuario;
+    bool encontrado = false;
+
+    while (archivo_entrada >> id && std::getline(archivo_entrada, nombre_usuario)) {
+        if (id == cedula) {
+            encontrado = true;
+            archivo_entrada.close();
+
+            size_t pos = nombre_usuario.find(',');
+            if (pos != std::string::npos) {
+                std::string nombre = nombre_usuario.substr(pos + 1);
+                std::cout << "La cédula ingresada pertenece a: " << nombre << std::endl;
+            }
+            return false;
+        }
+    }
+
+    archivo_entrada.close();
+
+    if (!encontrado) {
+        std::cout << "La cédula ingresada no pertenece a ningún usuario" << std::endl;
+    }
+
+    return !encontrado;
 }
 
 
