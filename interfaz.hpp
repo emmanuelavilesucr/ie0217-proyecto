@@ -1,5 +1,11 @@
 #ifndef INTERFAZ_HPP
 #define INTERFAZ_HPP
+#include "clientes.hpp"
+#include <iostream>
+#include <stdexcept>
+#include <regex>
+#include <fstream>
+#include <limits>
 
 class Interfaz {
 private:

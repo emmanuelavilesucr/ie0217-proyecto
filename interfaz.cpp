@@ -1,13 +1,8 @@
 #include "interfaz.hpp" 
-#include "clientes.hpp"
 // #include "CuentasBancarias.hpp"
 // #include "Prestamos.hpp"
 // #include "infoClientes.hpp"
-#include <iostream>
-#include <stdexcept>
-#include <regex>
-#include <fstream>
-#include <limits>
+
 
 bool Interfaz::crearCuentaVerificarRepetidos(long long int cedula){
     
@@ -57,7 +52,7 @@ void Interfaz::crearCuentaVerificarExpresiones(){
                 if  (verificado == true){
 
                     Clientes clientes(cedula, nombre);
-                    cliente.GuardarInformacion();
+                    clientes.GuardarInformacion();
                     std::cout << "Su cuenta ha sido creada" << std::endl;
                     break;
                 }
@@ -190,6 +185,6 @@ void Interfaz::menuInicial(){
         }
     }catch (std::exception& e){
         std::cerr << "Error detectado: " << e.what() << std::endl;
+        exit(0);
     }
 }
-
