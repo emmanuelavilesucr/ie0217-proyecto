@@ -4,7 +4,6 @@ InfoCliente::InfoCliente(float montoPrestamo, float tasaInteresAnual, int numCuo
     this->montoPrestamo = montoPrestamo;
     this->tasaInteresAnual = tasaInteresAnual;
     this->numCuotas = numCuotas;
-    cout << "xd";
     amortizacion = calcularAmortizacion();
 }
 
