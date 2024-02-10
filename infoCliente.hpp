@@ -13,13 +13,6 @@ class InfoCliente {
         InfoCliente(float montoPrestamo, float tasaInteresAnual, int cuotas);
         std::vector<std::vector<float>> calcularAmortizacion();
         void generarReporte(std::string nombre);
-        void menuPrincipal();
-        void procesarOpcion1();
-        void menuSecundario(std::string plazo1, std::string plazo2, std::string plazo3);
-        void procesarOpcion2();
-        void menuTerceario();
-        void procesarOpcion3();
-
 
     protected:
         float montoPrestamo;

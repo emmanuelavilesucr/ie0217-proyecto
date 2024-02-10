@@ -50,36 +50,3 @@ void InfoCliente::generarReporte(std::string nombre){
     archivo.close();
 
 }
-
-void InfoCliente::menuPrincipal(){
-    std::cout << "\n --- Tipos de prestamos ---\n";
-    std::cout << " 1.Prestamo Prendario\n";
-    std::cout << " 2.Prestamo Hipotecario\n";
-    std::cout << " 3.Prestamo Personal\n";
-    std::cout << " 4.Reporte personalizado\n";
-}
-
-void InfoCliente::menuSecundario(std::string plazo1, std::string plazo2, std::string plazo3){
-    std::cout << "\n ---  Plazos preestablecidos ---\n";
-    std::cout << " 1. "<< plazo1 << "\n";
-    std::cout << " 2. "<< plazo2 << "\n";
-    std::cout << " 3. "<< plazo3 << "\n";
-}
-
-void InfoCliente::menuTerceario(){
-    std::cout << "\n --- ¿Desea generar un reporte? ---\n";
-    std::cout << " 1.Generar reporte\n";
-    std::cout << " 2.Salir\n";
-}
-
-void InfoCliente::procesarOpcion1(){
-
-}
-
-void InfoCliente::procesarOpcion2(){
-
-}
-
-void InfoCliente::procesarOpcion3(){
-
-}
