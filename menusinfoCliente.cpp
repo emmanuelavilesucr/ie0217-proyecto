@@ -48,7 +48,7 @@ int verificarEntrada(int numOpciones){
     }catch (const std::exception& e){
         /// Maneja el error lanzado
         std::cerr << "Error: " << e.what() << std::endl;
-        return 0;
+        exit(0);
     }
 
 }
@@ -182,7 +182,7 @@ void MenusInfoCliente::procesarOpcion1()
             }catch (const std::exception& e){
                 /// Maneja el error lanzado
                 std::cerr << "Error: " << e.what() << std::endl;
-                break; 
+                exit(0); 
             }
     }
 }
