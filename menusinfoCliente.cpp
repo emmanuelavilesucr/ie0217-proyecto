@@ -186,11 +186,3 @@ void MenusInfoCliente::procesarOpcion1()
             }
     }
 }
-
-int main(){
-    MenusInfoCliente menus;
-    menus.menuPrincipal();
-    menus.procesarOpcion1();
-
-    return 0;
-}

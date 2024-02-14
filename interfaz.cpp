@@ -1,4 +1,5 @@
-#include "interfaz.hpp" 
+#include "interfaz.hpp"
+#include "menusInfoCliente.hpp"
 // #include "CuentasBancarias.hpp"
 // #include "Prestamos.hpp"
 // #include "infoClientes.hpp"
@@ -180,7 +181,9 @@ void Interfaz::menuInicial(){
         switch (opcion)
         {
         case 1:
-            std::cout << "Se ha elegido la opcion 1" << std::endl;
+            MenusInfoCliente menus;
+            menus.menuPrincipal();
+            menus.procesarOpcion1();
             break;
         case 2:
             menuAtencionClientes();
