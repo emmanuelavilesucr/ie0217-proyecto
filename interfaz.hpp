@@ -7,31 +7,34 @@
 #include <fstream>
 #include <limits>
 
+/**
+ * Clase encargada de las acciones de la interfaz
+ * 
+ */
 class Interfaz {
 private:
-    // Atributos futuros
-    // Clientes clientes;
-    // CuentasBancarias cuentas_bancarias;
-    // Prestamos prestamos;
-    // InformacionClientes informacion_clientes;
-
+      
+      // Función encargada de imprimir las opciones para la atención al ciente
       void menuAtencionClientes();
 
+      // Función encargada de de verificar las expresiones para crear una cuenta bancaria
       void crearCuentaVerificarExpresiones();
-        // Primero terminar codigo de la clase clientes
+
+      // Verifica por medio de la cédula si existe una cuenta específica
+      bool verificarCuenta();
 
       bool crearCuentaVerificarRepetidos(long long int cedula);
 
+      // Posibles funciones futuras
       void solicitarCuenta();
-        // Primero terminar codigo de la clase clientes
 
       void solicitarPrestamo();
 
       void informacion();
 
-      bool verificarCuenta();
+      
 public:
-
+    // Función que imprime el primer menú del sistema bancario
     void menuInicial();
   
 };
