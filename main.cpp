@@ -1,5 +1,8 @@
 #include "interfaz.hpp"
 
+/*
+* Función encargada de iniciar el programa
+*/
 int main(){
     while(1){
         try{
