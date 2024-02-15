@@ -24,7 +24,7 @@
 /**
  * @brief Clase para manejar la información del cliente y generar reportes de amortización.
  */
-InfoCliente::InfoCliente(float montoPrestamo, float tasaInteresAnual, int numCuotas){
+InfoCliente::InfoCliente(double montoPrestamo, double tasaInteresAnual, int numCuotas){
     this->montoPrestamo = montoPrestamo; /**< Monto del préstamo. */
     this->tasaInteresAnual = tasaInteresAnual; /**< Tasa de interés anual. */
     this->numCuotas = numCuotas; /**< Número de cuotas. */
@@ -36,7 +36,7 @@ InfoCliente::InfoCliente(float montoPrestamo, float tasaInteresAnual, int numCuo
  * @return Un vector de vectores que representa la tabla de amortización.
  * @throw std::runtime_error Si el número de cuotas es cero.
  */
-std::vector<std::vector<float>> InfoCliente::calcularAmortizacion(){
+std::vector<std::vector<double>> InfoCliente::calcularAmortizacion(){
     try{
         if (numCuotas == 0){
             throw runtime_error("Error: El número de cuotas no puede ser cero");
@@ -44,13 +44,13 @@ std::vector<std::vector<float>> InfoCliente::calcularAmortizacion(){
         float tasaInteresMensual = tasaInteresAnual / 12 / 100; // Calcula la tasa de interés mensual.
         float cuotaMensual = (tasaInteresMensual * montoPrestamo) / (1 - pow((1 + tasaInteresMensual), -numCuotas)); // Calcula la cuota mensual de amortización.
         float saldoRestante = montoPrestamo; // Inicializa el saldo restante al monto del préstamo.
-        std::vector<std::vector<float>> amortizacion; // Vector de vectores para almacenar la tabla de amortización.
+        std::vector<std::vector<double>> amortizacion; // Vector de vectores para almacenar la tabla de amortización.
 
         for (float cuota = 1; cuota < numCuotas + 1; cuota ++){ // Itera sobre cada cuota.
             float interesPendiente = saldoRestante * tasaInteresMensual; // Calcula el interés pendiente para esta cuota.
             float amortizacionPrincipal = cuotaMensual - interesPendiente; // Calcula la amortización principal para esta cuota.
             saldoRestante -= amortizacionPrincipal; // Actualiza el saldo restante.
-            std::vector<float> vectorTemp = {cuota, interesPendiente, amortizacionPrincipal, saldoRestante}; // Crea un vector temporal con la información de la cuota.
+            std::vector<double> vectorTemp = {cuota, interesPendiente, amortizacionPrincipal, saldoRestante}; // Crea un vector temporal con la información de la cuota.
             amortizacion.push_back(vectorTemp); // Agrega el vector temporal a la tabla de amortización.
         }
 
@@ -59,7 +59,7 @@ std::vector<std::vector<float>> InfoCliente::calcularAmortizacion(){
     catch(const exception& e){ // Manejo de excepciones.
         cerr << e.what() << endl; // Imprime el mensaje de la excepción.
         // Devuelve la tabla de amortización (en este caso, vacía debido a la excepción).
-        std::vector<float> vectorTemp = {};
+        std::vector<double> vectorTemp = {};
         amortizacion.push_back(vectorTemp);
         return amortizacion;
     }

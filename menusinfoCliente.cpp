@@ -51,13 +51,13 @@ void MenusInfoCliente::menuTerceario()
     std::cout << " 2.Salir\n";
 }
 
-void MenusInfoCliente::infoPrestamo(std::string tipoPrestamo, std::string plazo, float interes, int cuotas)
+void MenusInfoCliente::infoPrestamo(std::string tipoPrestamo, std::string plazo, double interes, int cuotas)
 {
     /// Muestra la información general de un préstamo
     std::cout << "\n --- Infromación general ---\n";
     std::cout << " Tipo de prestamo: " << tipoPrestamo << std::endl;
     std::cout << " Plazo: " << plazo << std::endl;
-    std::cout << " Tasa de interés anual: " << interes << std::endl;
+    std::cout << " Tasa de interés anual: " << interes << "%" << std::endl;
     std::cout << " Número de cuotas: " << cuotas << std::endl;
 }
 
@@ -80,14 +80,14 @@ int verificarEntrada(int numOpciones){
 
 }
 
-void MenusInfoCliente::procesarOpcion3(std::string tipo, std::string plazo, float interes, int cuotas){
+void MenusInfoCliente::procesarOpcion3(std::string tipo, std::string plazo, double interes, int cuotas){
     int opcion2 = verificarEntrada(2);
     if (opcion2 == 0){
         return;
     }
     /// Maneja las opciones del menú 3, llama las funciones necesarias.
     if (opcion2 == 1){
-            float montoPrestamo;
+            double montoPrestamo;
             try{
                 cout<<"Ingrese el monto que desea consultar: ";
                 cin>>montoPrestamo;
@@ -161,7 +161,7 @@ void MenusInfoCliente::procesarOpcion1()
 
         case 2:
             prestamo1.tipo = "Personal";
-            prestamo1.plazos = {"Setenta y dos meses", "Ochenta meses", "Ochenta y cuatro meses"};
+            prestamo1.plazos = {"Doce meses", "Veinticuatro meses", "Treintaiséis meses"};
             prestamo1.interes = {35, 21, 9};
             prestamo1.cuotas = {12, 24 ,36};
 
@@ -182,8 +182,8 @@ void MenusInfoCliente::procesarOpcion1()
 
         default:
             try{
-                float montoPrestamo;
-                float interes;
+                double montoPrestamo;
+                double interes;
                 int cuotas;
 
                 cout<<"Ingrese el monto del prestamo: ";

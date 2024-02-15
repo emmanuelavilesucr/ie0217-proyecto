@@ -32,9 +32,9 @@ struct Datos {
     std::string tipo; /**< Tipo de préstamo. */
     std::vector<std::string> plazos; /**< Lista de plazos disponibles. */
     std::string plazo; /**< Plazo seleccionado. */
-    std::vector<float> interes; /**< Lista de tasas de interés. */
+    std::vector<double> interes; /**< Lista de tasas de interés. */
     std::vector<int> cuotas; /**< Lista de cantidades de cuotas. */
-    float montoPrestamo; /**< Monto del préstamo. */
+    double montoPrestamo; /**< Monto del préstamo. */
     std::string nombreReporte; /**< Nombre del reporte. */
 };
 
@@ -80,7 +80,7 @@ class MenusInfoCliente {
          * @param interes Tasa de interés.
          * @param cuotas Cantidad de cuotas.
          */
-        void procesarOpcion3(std::string tipo, std::string plazos, float interes, int cuotas);
+        void procesarOpcion3(std::string tipo, std::string plazos, double interes, int cuotas);
 
         /**
          * @brief Muestra la información del préstamo.
@@ -89,7 +89,7 @@ class MenusInfoCliente {
          * @param interes Tasa de interés.
          * @param cuotas Cantidad de cuotas.
          */
-        void infoPrestamo(std::string tipoPrestamo, std::string plazo, float interes, int cuotas);
+        void infoPrestamo(std::string tipoPrestamo, std::string plazo, double interes, int cuotas);
 
 };
 
