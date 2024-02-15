@@ -1,8 +1,32 @@
+
+
 #include "menusInfoCliente.hpp"
 #include "infoCliente.hpp"
 
+/**
+  * @file menusInfoCliente.cpp
+ * @brief Implementación de la clase MenusInfoCliente y funciones relacionadas.
+ * 
+ * @license 
+ * Copyright 2024 [Brenda Natalia Castro Jiménez, Emanuel Avilés Ramírez, Luis José Brenes Campos]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
 void MenusInfoCliente::menuPrincipal()
 {
+    /// Muestra el menú principal con los tipos de préstamos disponibles
     std::cout << "\n --- Tipos de prestamos ---\n";
     std::cout << " 1.Prestamo Prendario\n";
     std::cout << " 2.Prestamo Personal\n";
@@ -12,6 +36,7 @@ void MenusInfoCliente::menuPrincipal()
 
 void MenusInfoCliente::menuSecundario(std::string plazo1, std::string plazo2, std::string plazo3)
 {
+    /// Muestra un menú secundario con plazos preestablecidos para elegir
     std::cout << "\n ---  Plazos preestablecidos ---\n";
     std::cout << " 1. " << plazo1 << "\n";
     std::cout << " 2. " << plazo2 << "\n";
@@ -20,6 +45,7 @@ void MenusInfoCliente::menuSecundario(std::string plazo1, std::string plazo2, st
 
 void MenusInfoCliente::menuTerceario()
 {
+    /// Muestra un menú para preguntar al usuario si desea generar un reporte
     std::cout << "\n --- ¿Desea generar un reporte? ---\n";
     std::cout << " 1.Generar reporte\n";
     std::cout << " 2.Salir\n";
@@ -27,6 +53,7 @@ void MenusInfoCliente::menuTerceario()
 
 void MenusInfoCliente::infoPrestamo(std::string tipoPrestamo, std::string plazo, float interes, int cuotas)
 {
+    /// Muestra la información general de un préstamo
     std::cout << "\n --- Infromación general ---\n";
     std::cout << " Tipo de prestamo: " << tipoPrestamo << std::endl;
     std::cout << " Plazo: " << plazo << std::endl;
@@ -58,6 +85,7 @@ void MenusInfoCliente::procesarOpcion3(std::string tipo, std::string plazo, floa
     if (opcion2 == 0){
         return;
     }
+    /// Maneja las opciones del menú 3, llama las funciones necesarias.
     if (opcion2 == 1){
             float montoPrestamo;
             try{
@@ -86,6 +114,7 @@ void MenusInfoCliente::procesarOpcion2(Datos prestamo){
         return;
     }
 
+    /// Maneja las opciones dle menú 2, llama las funciones necesarias.
     switch (opcion1){
         case 1:
             infoPrestamo(prestamo.tipo, prestamo.plazos[0], prestamo.interes[0], prestamo.cuotas[0]);
@@ -114,10 +143,10 @@ void MenusInfoCliente::procesarOpcion1()
         return;
     }
 
+    /// Variable de tipo Datos (Struct)
     Datos prestamo1;
-    Datos prestamo2;
-    Datos prestamo3;
 
+    /// Maneja las opciones del menú principal
     switch (opcion)
     {
         case 1:
