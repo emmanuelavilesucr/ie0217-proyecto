@@ -162,8 +162,8 @@ void MenusInfoCliente::procesarOpcion1()
         case 2:
             prestamo1.tipo = "Personal";
             prestamo1.plazos = {"Setenta y dos meses", "Ochenta meses", "Ochenta y cuatro meses"};
-            prestamo1.interes = {36, 17, 5};
-            prestamo1.cuotas = {72, 80 ,84};
+            prestamo1.interes = {35, 21, 9};
+            prestamo1.cuotas = {12, 24 ,36};
 
             menuSecundario(prestamo1.plazos[0], prestamo1.plazos[1], prestamo1.plazos[2]);
             procesarOpcion2(prestamo1);
