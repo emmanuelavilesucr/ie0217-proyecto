@@ -1,5 +1,6 @@
 #include "interfaz.hpp"
 #include "menusInfoCliente.hpp"
+#include "cuentasAhorros.hpp"
 // #include "CuentasBancarias.hpp"
 // #include "Prestamos.hpp"
 /**
@@ -101,6 +102,7 @@ void Interfaz::crearCuentaVerificarExpresiones(){
         std::cin.ignore();
 
         while(true){
+            std::cout << std::endl;
             std::cout << "Ingrese su nombre: ";
             getline(std::cin, nombre);
 
@@ -112,13 +114,23 @@ void Interfaz::crearCuentaVerificarExpresiones(){
 
             if (verificar_nombre == true && verificar_cedula == true){
                 long long int cedula = std::stoll(cedula_expresion);
-                bool verificado = crearCuentaVerificarRepetidos(cedula);
-                if  (verificado == true){
-
+                bool verificado1 = crearCuentaVerificarRepetidos(cedula);
+                if  (verificado1 == true){
+                    
+                    CuentasAhorros cuenta(cedula);
                     Clientes clientes(cedula, nombre);
-                    clientes.GuardarInformacion();
-                    std::cout << "Su cuenta ha sido creada" << std::endl;
-                    break;
+
+                    bool verificado2 = cuenta.crearCuenta();
+                    if (verificado2 == true){
+                        clientes.GuardarInformacion();
+                        std::cout << "Su cuenta ha sido creada" << std::endl;
+                        std::cout << std::endl;
+                        break;
+                    }else{
+                        std::cout << "Su cuenta no ha sido creada" << std::endl;
+                        std::cout << std::endl;
+                        break;
+                    }
                 }
 
             }else if (verificar_nombre == false && verificar_cedula == false) {
@@ -143,6 +155,8 @@ void Interfaz::crearCuentaVerificarExpresiones(){
             }
         }
         
+    }catch (std::exception& e){
+        std::cerr << "Error detectado: " << e.what() << std::endl;
     }catch (...){
         std::cout << "Error inesperado a la hora de crear la cuenta" << std::endl;
     }
@@ -215,6 +229,7 @@ bool Interfaz::verificarCuenta() {
 void Interfaz::menuAtencionClientes(){
     int opcion_cliente;
     
+    std::cout << std::endl;
     std::cout << "---Opciones para la atención al cliente---" << std::endl;
     std::cout << "1. Acceder a una cuenta creada" << std::endl;
     std::cout << "2. Crear una cuenta" << std::endl;

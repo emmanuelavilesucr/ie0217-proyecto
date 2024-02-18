@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <limits>
 
 class CuentasAhorros{
     public:
@@ -16,6 +17,7 @@ class CuentasAhorros{
         bool tipo_moneda;
 
         bool verificarCuentaAhorrosRepetida();
+        void guardarDatos();
 };
 
 #endif
