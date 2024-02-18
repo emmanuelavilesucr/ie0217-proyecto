@@ -27,6 +27,41 @@
  * @return true 
  * @return false 
  */
+
+void Interfaz::accionesCliente(long long int cedula){
+    int opcion_accion_cliente;
+    
+    std::cout << "---Principales tipos de acciones---" << std::endl;
+    std::cout << "1. Cuentas de ahorros" << std::endl;
+    std::cout << "2. Prestamos" << std::endl;
+    std::cout << "3. CDP's" << std::endl;
+    std::cout << "4. Salir de las acciones de cliente" << std::endl;
+    std::cout << "Ingrese el número de una opción: ";
+
+    std::cin >> opcion_accion_cliente;
+        
+        switch (opcion_accion_cliente)
+        {
+        case 1:
+            std::cout << "Opcion 1" << std::endl;
+            std:: cout << std::endl;
+            break;
+        case 2:
+            std::cout << "Opcion 2" << std::endl;
+            std:: cout << std::endl;
+            break;
+        case 3:
+            std::cout << "Opcion 3" << std::endl;
+            std:: cout << std::endl;
+            break;
+        case 4:
+            break;
+        default:
+            throw std::runtime_error("La opción elegida no esta disponible.");
+        }
+
+}
+
 bool Interfaz::crearCuentaVerificarRepetidos(long long int cedula){
     
     std::ifstream archivo_entrada("clientes.txt");
@@ -155,7 +190,10 @@ bool Interfaz::verificarCuenta() {
             size_t pos = nombre_usuario.find(',');
             if (pos != std::string::npos) {
                 std::string nombre = nombre_usuario.substr(pos + 1);
-                std::cout << "La cédula ingresada pertenece a: " << nombre << std::endl;
+                std::cout << std::endl;
+                std::cout << "Bienvenido: " << nombre << std::endl;
+                std:: cout << std::endl;
+                accionesCliente(cedula);
             }
             return false;
         }
@@ -188,7 +226,6 @@ void Interfaz::menuAtencionClientes(){
         switch (opcion_cliente)
         {
         case 1:
-            std::cout << "Se ha elegido la opcion 1" << std::endl;
             verificarCuenta();
             break;
         case 2:
