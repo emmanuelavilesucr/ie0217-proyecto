@@ -136,6 +136,7 @@ void CuentasAhorros::menuAccionesCuenta(){
         break;
     
     case 2:
+        verMisCuentas();
         break;
 
     case 3:
@@ -155,5 +156,49 @@ void CuentasAhorros::menuAccionesCuenta(){
   
     default:
         throw std::runtime_error("La opción elegida no esta disponible.");
+    }
+}
+
+void CuentasAhorros::verMisCuentas(){
+        std::ifstream archivo_entrada("cuentasAhorros.txt");
+
+    if (archivo_entrada.is_open()) {
+        long long int id;
+        int tipo_moneda_archivo;
+        double dinero;
+        std::string linea;
+
+        std::cout << std::endl;
+        std::cout << "Cuentas del usuario: " << cedula_cliente << std::endl;
+        std::cout << "--------------------" << std::endl;
+
+        while (std::getline(archivo_entrada, linea)) {
+            std::istringstream ss(linea);
+
+            if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                if (id == cedula_cliente) {
+                    std::cout << "Cantidad de dinero: " << dinero << std::endl;
+                    if (tipo_moneda_archivo == 1){
+                       std::cout << "Tipo de moneda: colones"  << std::endl;
+                       std::cout << "--------------------" << std::endl;
+                    }else{
+                        std::cout << "Tipo de moneda: dolares"  << std::endl;
+                        std::cout << "--------------------" << std::endl;
+                    }
+                }else{
+                    continue;
+                }
+            } else {
+                // Hubo un problema al procesar la línea
+                std::cerr << "Error al procesar la línea: " << linea << std::endl;
+            }
+        
+        } 
+        archivo_entrada.close();
+        return;
+    } else{
+        std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
+        return;
     }
 }

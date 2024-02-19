@@ -21,6 +21,7 @@ class CuentasAhorros{
 
         bool verificarCuentaAhorrosRepetida();
         void guardarDatos();
+        void verMisCuentas();
 };
 
 #endif
