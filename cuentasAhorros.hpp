@@ -8,10 +8,11 @@
 #include <sstream>
 
 class CuentasAhorros{
+
     public:
-        
         CuentasAhorros(long long int cedula);
         bool crearCuenta();
+        void menuAccionesCuenta();
     
     private:
         long long int cedula_cliente;

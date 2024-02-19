@@ -25,7 +25,6 @@
 void Interfaz::accionesCliente(long long int cedula){
     int opcion_accion_cliente;
     CuentasAhorros cuenta(cedula);
-    bool verificar;
     
     std::cout << "---Principales tipos de acciones---" << std::endl;
     std::cout << "1. Cuentas de ahorros" << std::endl;
@@ -39,14 +38,7 @@ void Interfaz::accionesCliente(long long int cedula){
         switch (opcion_accion_cliente)
         {
         case 1:
-            verificar = cuenta.crearCuenta();
-            if (verificar == true){
-                std::cout << "Cuenta de ahorros creada" << std::endl;
-                std::cout << std::endl;
-            }else {
-                std::cout << "Cuenta de ahorros no creada" << std::endl;
-                std::cout << std::endl;
-            }
+            cuenta.menuAccionesCuenta();
             break;
         case 2:
             std::cout << "Opcion 2" << std::endl;
@@ -271,6 +263,7 @@ void Interfaz::menuAtencionClientes(){
 void Interfaz::menuInicial(){
     int opcion;
 
+    std::cout << std::endl;
     std::cout << "---Bienvenido al servicio administrativo del banco---" << std::endl;
     std::cout << "1. Información al cliente" << std::endl;
     std::cout << "2. Atención al cliente" << std::endl;

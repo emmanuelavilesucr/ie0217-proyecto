@@ -31,7 +31,8 @@ bool CuentasAhorros::crearCuenta(){
         default:
             throw std::runtime_error("El tipo de moneda elegida no existe.");
         }
-
+        
+        std::cout << std::endl;
         std::cout << "Ingrese la cantidad de dinero inicial de su cuenta: ";
         std::cin >> dinero_cuenta;
         if (std::cin.fail() || dinero_cuenta < 0){
@@ -103,5 +104,56 @@ void CuentasAhorros::guardarDatos(){
         archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
+    }
+}
+
+void CuentasAhorros::menuAccionesCuenta(){
+    int opcion;
+    bool verificar;
+
+    std::cout << std::endl;
+    std::cout << "---Posibles Opciones a realizar---" << std::endl;
+    std::cout << "1. Crear cuenta nueva" << std::endl;
+    std::cout << "2. Ver tus cuentas actuales" << std::endl;
+    std::cout << "3. Depositar dinero a una cuenta" << std::endl;
+    std::cout << "4. Realizar un retiro" << std::endl;
+    std::cout << "5. Transferir dinero a otra cuenta propia" << std::endl;
+    std::cout << "6. Transferir dinero a cuenta de otro usuario" << std::endl;
+    std::cout << "7. Salir" << std::endl;
+    std::cout << "Elija una opcion para su cuenta de ahorros: ";
+    std::cin >> opcion;
+
+    switch (opcion){
+    case 1:
+        verificar = crearCuenta();
+        if (verificar == true){
+            std::cout << "Cuenta de ahorros creada" << std::endl;
+            std::cout << std::endl;
+        }else {
+            std::cout << "Cuenta de ahorros no creada" << std::endl;
+            std::cout << std::endl;
+        }
+        break;
+    
+    case 2:
+        break;
+
+    case 3:
+        break;
+
+    case 4:
+        break;
+
+    case 5:
+        break;
+
+    case 6:
+        break;
+
+    case 7:
+        break;
+  
+    default:
+        throw std::runtime_error("La opción elegida no esta disponible.");
     }
 }
