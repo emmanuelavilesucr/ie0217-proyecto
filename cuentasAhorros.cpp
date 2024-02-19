@@ -23,18 +23,18 @@ bool CuentasAhorros::crearCuenta(){
 
         switch (tipo){
         case 1:
-            this->tipo_moneda = true;
+            tipo_moneda = 1;
             break;
         case 2:
-            this->tipo_moneda = false;
+            tipo_moneda = 2;
             break;
         default:
             throw std::runtime_error("El tipo de moneda elegida no existe.");
         }
 
         std::cout << "Ingrese la cantidad de dinero inicial de su cuenta: ";
-        std::cin >> this->dinero_cuenta;
-        if (std::cin.fail() || this->dinero_cuenta < 0){
+        std::cin >> dinero_cuenta;
+        if (std::cin.fail() || dinero_cuenta < 0){
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             throw std::runtime_error("La cantidad de dinero elegida no es valida");
@@ -62,36 +62,45 @@ bool CuentasAhorros::verificarCuentaAhorrosRepetida(){
 
     if (archivo_entrada.is_open()) {
         long long int id;
-        bool tipo_moneda;
+        int tipo_moneda_archivo;
         double dinero;
+        std::string linea;
 
-        while (archivo_entrada >> id >> std::ws && archivo_entrada >> tipo_moneda >> std::ws && archivo_entrada >> dinero) {
-            if (id == this->cedula_cliente && tipo_moneda == this->tipo_moneda){
-                std::cout << "Ya existe una cuenta de ahorros con este tipo de moneda para este usuario" <<  std::endl;
-                std::cout << "Intente otra vez..." << std::endl;
-                return false;
+        while (std::getline(archivo_entrada, linea)) {
+            std::istringstream ss(linea);
+
+            if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                if (id == cedula_cliente) {
+                    if (tipo_moneda_archivo == tipo_moneda){
+                        std::cout << "Este usuario ya posee una cuenta de este tipo" <<  std::endl;
+                        std::cout << "Intente otra vez..." << std::endl;
+                        archivo_entrada.close();
+                        return false;
+                    }
+                }else{
+                    continue;
+                }
+            } else {
+                // Hubo un problema al procesar la línea
+                std::cerr << "Error al procesar la línea: " << linea << std::endl;
             }
-        }
+        
+        } 
         archivo_entrada.close();
         return true;
-    } else {
+    } else{
         std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
+        return false;
     }
-
-    return false;
 }
 
 void CuentasAhorros::guardarDatos(){
     
     std::ofstream archivo("cuentasAhorros.txt", std::ios::app);
     if (archivo.is_open()) {
-        if (tipo_moneda == true){
-            archivo << this->cedula_cliente << "," << "true" << this->dinero_cuenta << std::endl;
-            archivo.close();
-        }else{
-            archivo << this->cedula_cliente << "," << "false" << "," << this->dinero_cuenta << std::endl;
-            archivo.close();
-        }
+        archivo << this->cedula_cliente << "," << tipo_moneda << "," << this->dinero_cuenta << std::endl;
+        archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
     }

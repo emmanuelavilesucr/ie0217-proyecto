@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <limits>
+#include <string>
+#include <sstream>
 
 class CuentasAhorros{
     public:
@@ -14,7 +16,7 @@ class CuentasAhorros{
     private:
         long long int cedula_cliente;
         double dinero_cuenta;
-        bool tipo_moneda;
+        int tipo_moneda;
 
         bool verificarCuentaAhorrosRepetida();
         void guardarDatos();
