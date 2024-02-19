@@ -1,18 +1,16 @@
 #ifndef MENUCDP_HPP
 #define MENUCDP_HPP
-#include <iostream>
+
+#include "cdp.hpp"
 
 class MenuCDP {
     public:
 
         void menuPrincipal();
-        void menuSecundario();
-        void menuPlazos();
-
-
-        void primerPlazo();
-        void segundoPlazo();
-        void tercerPlazo();
+        void menuSecundario(CDP& cdp);
+        void menuPlazos(CDP& cdp);
+        void monto(CDP& cdp);
+ 
 
 };
 
