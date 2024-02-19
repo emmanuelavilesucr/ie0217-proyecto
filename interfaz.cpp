@@ -20,17 +20,12 @@
  * limitations under the License.
  * 
 */
-/**
- * @brief Verificca que la cédula ingresada por el usuario, no pertezca a otro usuario
- * 
- * Recibe la cédula dingresada y retorna un booleano dependiendo del resultado
- * @param cedula 
- * @return true 
- * @return false 
- */
+
 
 void Interfaz::accionesCliente(long long int cedula){
     int opcion_accion_cliente;
+    CuentasAhorros cuenta(cedula);
+    bool verificar;
     
     std::cout << "---Principales tipos de acciones---" << std::endl;
     std::cout << "1. Cuentas de ahorros" << std::endl;
@@ -44,8 +39,14 @@ void Interfaz::accionesCliente(long long int cedula){
         switch (opcion_accion_cliente)
         {
         case 1:
-            std::cout << "Opcion 1" << std::endl;
-            std:: cout << std::endl;
+            verificar = cuenta.crearCuenta();
+            if (verificar == true){
+                std::cout << "Cuenta de ahorros creada" << std::endl;
+                std::cout << std::endl;
+            }else {
+                std::cout << "Cuenta de ahorros no creada" << std::endl;
+                std::cout << std::endl;
+            }
             break;
         case 2:
             std::cout << "Opcion 2" << std::endl;
@@ -62,6 +63,15 @@ void Interfaz::accionesCliente(long long int cedula){
         }
 
 }
+
+/**
+ * @brief Verificca que la cédula ingresada por el usuario, no pertezca a otro usuario
+ * 
+ * Recibe la cédula dingresada y retorna un booleano dependiendo del resultado
+ * @param cedula 
+ * @return true 
+ * @return false 
+ */
 
 bool Interfaz::crearCuentaVerificarRepetidos(long long int cedula){
     
