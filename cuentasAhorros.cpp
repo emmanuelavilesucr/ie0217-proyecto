@@ -40,7 +40,7 @@ bool CuentasAhorros::crearCuenta(){
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             throw std::runtime_error("La cantidad de dinero elegida no es valida");
             }
-
+        
         bool verificando;
 
         verificando = verificarCuentaAhorrosRepetida();
@@ -100,7 +100,8 @@ void CuentasAhorros::guardarDatos(){
     
     std::ofstream archivo("cuentasAhorros.txt", std::ios::app);
     if (archivo.is_open()) {
-        archivo << this->cedula_cliente << "," << tipo_moneda << "," << this->dinero_cuenta << std::endl;
+        archivo << this->cedula_cliente << "," << tipo_moneda << ","
+        << std::fixed << std::setprecision(15) << this->dinero_cuenta << std::endl;
         archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
@@ -178,13 +179,13 @@ void CuentasAhorros::verMisCuentas(){
             if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
 
                 if (id == cedula_cliente) {
-                    std::cout << "Cantidad de dinero: " << dinero << std::endl;
+                    std::cout << std::fixed << std::setprecision(15) << dinero << std::endl;
                     if (tipo_moneda_archivo == 1){
                        std::cout << "Tipo de moneda: colones"  << std::endl;
-                       std::cout << "--------------------" << std::endl;
+                       std::cout << "------------------------------" << std::endl;
                     }else{
                         std::cout << "Tipo de moneda: dolares"  << std::endl;
-                        std::cout << "--------------------" << std::endl;
+                        std::cout << "------------------------------" << std::endl;
                     }
                 }else{
                     continue;
