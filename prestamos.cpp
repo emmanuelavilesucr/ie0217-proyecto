@@ -1,19 +1,211 @@
 #include "prestamos.hpp"
 #include <fstream>
 
-
-void Prestamos::nuevoPrestamo(){
-    
+Prestamos:: Prestamos(long long int id){
+    this->id = id;
 }
 
-void Prestamos::EscribirPrestamo(){
+void Prestamos::menuPrestamos()
+{
+    /// Muestra el menú principal con los tipos de préstamos disponibles
+    std::cout << "\n --- Gestión de prestamos ---\n";
+    std::cout << " 1.Ver préstamos asociados a esa cuenta\n";
+    std::cout << " 2.Crear préstamo\n";
+    std::cout << " 3.Abonar a un préstamo\n";
+}
+
+void Prestamos::menuPrincipal()
+{
+    /// Muestra el menú principal con los tipos de préstamos disponibles
+    std::cout << "\n --- Tipos de prestamos ---\n";
+    std::cout << " 1.Prestamo Prendario\n";
+    std::cout << " 2.Prestamo Personal\n";
+    std::cout << " 3.Prestamo Hipotecario\n";
+}
+
+bool Prestamos::procesarOpciontercearia(){
+    cout << "\n--Tipos de moneda--\n1.Colones\n2.Dolares\n";
+    int opcion2 = verificarEntrada(2);
+    //if (opcion2 == 0){
+     //   return;
+    //}
+    if (opcion2 == 1){
+            return true;
+    }
+    else{
+        return false;
+    }
+
+}
+
+int Prestamos::generarNuevoID() {
+    std::ifstream archivo("prestamos.txt");
+    int contador = 1000;
+    std::string linea;
+    // Contar el número de préstamos registrados
+    while (std::getline(archivo, linea)) {
+        contador++;
+    }
+    archivo.close();
+    // El nuevo ID único es el contador incrementado en 1
+    return contador + 1;
+}
+
+void Prestamos::procesarOpcionSecun(Datos prestamo){
+    int opcion1 = MenusInfoCliente::verificarEntrada(3);
+    if (opcion1 == 0){
+        return;
+    }
+    double monto;
+    bool moneda;
+    /// Maneja las opciones dle menú 2, llama las funciones necesarias.
+    switch (opcion1){
+        case 1:
+            MenusInfoCliente::infoPrestamo(prestamo.tipo, prestamo.plazos[0], prestamo.interes[0], prestamo.cuotas[0]);
+            try{
+                idPrestamo = generarNuevoID();
+                moneda = procesarOpciontercearia();
+                cout<<"Ingrese el monto que desea consultar: ";
+                cin>>monto;
+                if (std::cin.fail()){
+                    throw std::runtime_error("No es un dato válido para el monto");
+                }
+            }
+            catch(const std::exception& e){
+                /// Maneja el error lanzado
+                std::cerr << "Error: " << e.what() << std::endl;
+            }
+
+            EscribirPrestamo(prestamo.tipo, prestamo.plazos[0], prestamo.interes[0], prestamo.cuotas[0], monto, moneda);
+            break;
+        
+        case 2:
+            MenusInfoCliente::infoPrestamo(prestamo.tipo, prestamo.plazos[1], prestamo.interes[1], prestamo.cuotas[1]);
+            try{
+                idPrestamo = generarNuevoID();
+                moneda = procesarOpciontercearia();
+                cout<<"Ingrese el monto que desea consultar: ";
+                cin>>monto;
+                if (std::cin.fail()){
+                    throw std::runtime_error("No es un dato válido para el monto");
+                }
+            }
+            catch(const std::exception& e){
+                /// Maneja el error lanzado
+                std::cerr << "Error: " << e.what() << std::endl;
+            }
+            EscribirPrestamo(prestamo.tipo, prestamo.plazos[1], prestamo.interes[1], prestamo.cuotas[1], monto, moneda);
+            break;
+
+        default:
+            MenusInfoCliente::infoPrestamo(prestamo.tipo, prestamo.plazos[2], prestamo.interes[2], prestamo.cuotas[2]);
+            try{
+                idPrestamo = generarNuevoID();
+                moneda = procesarOpciontercearia();
+                cout<<"Ingrese el monto que desea consultar: ";
+                cin>>monto;
+                if (std::cin.fail()){
+                    throw std::runtime_error("No es un dato válido para el monto");
+                }
+            }
+            catch(const std::exception& e){
+                /// Maneja el error lanzado
+                std::cerr << "Error: " << e.what() << std::endl;
+            }
+            EscribirPrestamo(prestamo.tipo, prestamo.plazos[2], prestamo.interes[2], prestamo.cuotas[2], monto, moneda);
+            break;
+    }
+
+}
+
+
+void Prestamos::procesarOpcion1()
+{
+    int opcion = MenusInfoCliente::verificarEntrada(3);
+    if (opcion == 0){
+        return;
+    }
+
+    /// Variable de tipo Datos (Struct)
+    Datos prestamo1;
+
+    /// Maneja las opciones del menú principal
+    switch (opcion)
+    {
+        case 1:
+            prestamo1.tipo = "Prendario";
+            prestamo1.plazos = {"Seis meses", "Un año", "Tres años"};
+            prestamo1.interes = {15, 12, 10};
+            prestamo1.cuotas = {6, 12 ,36};
+
+            MenusInfoCliente::menuSecundario(prestamo1.plazos[0], prestamo1.plazos[1], prestamo1.plazos[2]);
+            procesarOpcionSecun(prestamo1);
+            break;
+
+        case 2:
+            prestamo1.tipo = "Personal";
+            prestamo1.plazos = {"Doce meses", "Veinticuatro meses", "Treintaiséis meses"};
+            prestamo1.interes = {35, 21, 9};
+            prestamo1.cuotas = {12, 24 ,36};
+
+            MenusInfoCliente::menuSecundario(prestamo1.plazos[0], prestamo1.plazos[1], prestamo1.plazos[2]);
+            procesarOpcionSecun(prestamo1);
+            break;
+
+        default:
+
+            prestamo1.tipo = "Hipotecario";
+            prestamo1.plazos = {"Diez años", "Veinte años", "Treinta años"};
+            prestamo1.interes = {5, 4, 3};
+            prestamo1.cuotas = {120, 240 ,360};
+
+            MenusInfoCliente::menuSecundario(prestamo1.plazos[0], prestamo1.plazos[1], prestamo1.plazos[2]);
+            procesarOpcionSecun(prestamo1);
+            break;
+    
+    }
+}
+
+
+void Prestamos::EscribirPrestamo(std::string tipo, std::string plazo, double interes, int cuotas, double monto, bool moneda){
 
    // std::cout << "ID del Cliente: " << cliente_id << ", Nombre: " << nombre << std::endl;
     std::ofstream archivo("prestamos.txt", std::ios::app);
     if (archivo.is_open()) {
-        archivo << idCuenta << "," << montoPrestamo << "," << interes << "," << cuotas <<  std::endl;  // Escribe los datos del cliente en archivo txt
+        archivo << idPrestamo << ","<< id << "," << tipo << "," << monto << "," << monto << "," << interes << "," << cuotas << "," << "0" <<  "," << moneda << std::endl;  // Escribe los datos del cliente en archivo txt
         archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
     }
+}
+
+void Prestamos::procesarOpcionPrestamos()
+{
+    int opcion = MenusInfoCliente::verificarEntrada(3);
+    if (opcion == 0){
+        return;
+    }
+
+    switch (opcion)
+    {
+        case 1:
+            cout << "Opción 1";
+            break;
+
+        case 2:
+            menuPrincipal();
+            procesarOpcion1();
+            break;
+        default:
+            cout << "Opción 3";
+            break;
+
+    }
+}
+
+int main(){
+    Prestamos prestamo(901200681);
+    prestamo.menuPrestamos();
+    prestamo.procesarOpcionPrestamos();
+    return 0;
 }

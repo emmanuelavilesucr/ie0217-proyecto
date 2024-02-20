@@ -91,6 +91,8 @@ class MenusInfoCliente {
          */
         void infoPrestamo(std::string tipoPrestamo, std::string plazo, double interes, int cuotas);
 
+        int verificarEntrada(int numOpciones);
+
 };
 
 #endif /* MENUSINFO_HPP */

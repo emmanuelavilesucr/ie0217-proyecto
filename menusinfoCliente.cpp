@@ -61,7 +61,7 @@ void MenusInfoCliente::infoPrestamo(std::string tipoPrestamo, std::string plazo,
     std::cout << " Número de cuotas: " << cuotas << std::endl;
 }
 
-int verificarEntrada(int numOpciones){
+int MenusInfoCliente::verificarEntrada(int numOpciones){
     try{
         int opcion;
         std::cout << "Ingrese una opcion: ";

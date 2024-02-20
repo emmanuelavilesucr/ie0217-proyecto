@@ -7,16 +7,25 @@ using namespace std;
 
 class Prestamos: public MenusInfoCliente {
     public:
-        void EscribirPrestamo();
+        Prestamos(long long int id);
+        void procesarOpcionPrestamos();
+        void menuPrestamos();
+        int generarNuevoID();
+        void procesarOpcion1();
+        void menuPrincipal();
+        void EscribirPrestamo(std::string tipo, std::string plazo, double interes, int cuotas, double monto, bool moneda);
         void nuevoPrestamo();
         bool verificarCuenta();
+        void procesarOpcionSecun(Datos prestamo);
+        bool procesarOpciontercearia();
 
     protected:
-        long long int idCuenta;
+        long long int idPrestamo;
+        long long int id;
         std::string nombreAsociado;
         std::string tipoPrestamo;
         double montoPrestamo;
         double interes;
-        int cuotas;
+        //int cuotas;
 };
 #endif
