@@ -27,6 +27,8 @@ class CuentasAhorros{
         void verMisCuentas();
         void verficarCantidadCuentas();
         void elegirCuenta();
+        bool deposito();
+        bool retiro();
 };
 
 #endif

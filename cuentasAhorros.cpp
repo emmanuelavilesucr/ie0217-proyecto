@@ -143,11 +143,19 @@ void CuentasAhorros::menuAccionesCuenta(){
     case 3:
         verficarCantidadCuentas();
         elegirCuenta();
+        verificar = deposito();
+        if (verificar == true){
+            std::cout << std::fixed << std::setprecision(15) << dinero_cuenta << std::endl;
+        }
         break;
 
     case 4:
         verficarCantidadCuentas();
         elegirCuenta();
+        verificar = retiro();
+        if (verificar == true){
+            std::cout << std::fixed << std::setprecision(15) << dinero_cuenta << std::endl;
+        }
         break;
 
     case 5:
@@ -330,10 +338,50 @@ void CuentasAhorros::elegirCuenta(){
             
         }
         archivo_entrada.close();
-        std::cout << id << " , " << tipo_moneda << " , " << dinero_cuenta;
         return;
     } else{
         std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
         return;
     }
 }
+
+bool CuentasAhorros::deposito(){
+    double dinero_depositado;
+    
+    std::cout << "Ingrese la cantidad de dinero que va a depositar a su cuenta: ";
+    std::cin >> dinero_depositado;
+
+    if (std::cin.fail() || dinero_depositado < 0){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ha elegido una cantidad de dinero erronea a depositar" << std::endl;
+        std::cout << std::endl;
+        return false;
+    }
+
+    dinero_cuenta = dinero_cuenta + dinero_depositado;
+    return true;
+}
+
+bool CuentasAhorros::retiro(){
+    double dinero_retirado;
+    
+    std::cout << "Ingrese la cantidad de dinero a retirar a su cuenta: ";
+    std::cin >> dinero_retirado;
+
+    if (std::cin.fail() || dinero_retirado < 0){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ha elegido una cantidad de dinero erronea a retirar" << std::endl;
+        std::cout << std::endl;
+        return false;
+    }else if (dinero_retirado > dinero_cuenta){
+        std::cout << "Su cuenta posee menos dinero del que pide retirar" << std::endl;
+        std::cout << std::endl;
+        return false;
+    }
+
+    dinero_cuenta = dinero_cuenta - dinero_retirado;
+    return true;
+}
+
