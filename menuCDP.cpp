@@ -14,19 +14,22 @@ void MenuCDP::mostrarCDPs() {
         std::string linea;
         while (std::getline(archivo, linea)) {
             std::istringstream ss(linea);
-            std::string idCuentaStr, montoStr, interesStr, tipo;
+            std::string idCuentaStr, montoStr, interesStr, tipo, plazoStr; 
             if (std::getline(ss, idCuentaStr, ',') &&
                 std::getline(ss, montoStr, ',') &&
                 std::getline(ss, interesStr, ',') &&
-                std::getline(ss, tipo)) {
+                std::getline(ss, tipo, ',') && 
+                std::getline(ss, plazoStr)) { 
                 long long int idCuenta = std::stoll(idCuentaStr);
                 double monto = std::stod(montoStr);
                 double interes = std::stod(interesStr);
+                int plazo = std::stoi(plazoStr); 
                 CDP cdp;
                 cdp.setIdCuenta(idCuenta);
                 cdp.setMontoCDP(monto);
                 cdp.setInteres(interes);
                 cdp.setTipo(tipo);
+                cdp.setPlazo(plazo); 
                 cdps.push_back(cdp);
             }
         }
@@ -42,9 +45,11 @@ void MenuCDP::mostrarCDPs() {
         std::cout << "Tipo de Divisa: " << cdp.getTipo() << std::endl;
         std::cout << "Interés: " << cdp.getInteres() << "%" << std::endl;
         std::cout << "Monto: " << cdp.getMontoCDP() << std::endl;
+        std::cout << "Plazo: " << cdp.getPlazo() << " meses" << std::endl; 
         std::cout << std::endl;
     }
 }
+
 
 void MenuCDP::menuPrincipal() {
     int opcion;
@@ -110,7 +115,7 @@ void MenuCDP::menuPlazos(CDP& cdp) {
     std::cout << "\n --- Plazos: ---\n";
     std::cout << " 1. Tres meses a 3% \n";
     std::cout << " 2. Seis meses a 4% \n";
-    std::cout << " 3. Un año a 5% \n";
+    std::cout << " 3. Doce meses a 5% \n";
     std::cout << " Ingrese una opción:\n";
     
     try {
@@ -118,14 +123,17 @@ void MenuCDP::menuPlazos(CDP& cdp) {
         
         switch (opcion_plazo) {
             case 1:
+                cdp.setPlazo(3);
                 cdp.setInteres(3);
                 monto(cdp); 
                 break;
             case 2:
+                cdp.setPlazo(6);
                 cdp.setInteres(4);
                 monto(cdp); 
                 break;
             case 3:
+                cdp.setPlazo(12);
                 cdp.setInteres(5);
                 monto(cdp); 
                 break;
@@ -149,6 +157,7 @@ void MenuCDP::monto(CDP& cdp) {
 
 
 
+// Main de prueba
 
 int main() {
     MenuCDP menu;
