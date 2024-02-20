@@ -179,6 +179,52 @@ void Prestamos::EscribirPrestamo(std::string tipo, std::string plazo, double int
     }
 }
 
+
+void Prestamos::prestamosAsociados()
+{
+    // Abre el archivo para leer
+    std::ifstream archivo("prestamos.txt");
+    std::string linea;
+
+    // Lee cada línea del archivo
+    while (std::getline(archivo, linea)) {
+        // Usa un stringstream para dividir la línea en partes usando la coma como delimitador
+        std::stringstream ss(linea);
+        std::string parte;
+        int contador = 0;
+        std::string moneda;
+
+        // Recorre cada parte de la línea
+        while (std::getline(ss, parte, ',')) {
+            contador++;
+            // Si es el segundo elemento (después de la coma), haz algo con él
+            if (contador == 2) {
+                //std::cout << "Segundo elemento de la línea: " << parte << std::endl;
+                if (std::to_string(id) == parte){
+                    std::stringstream ss(linea);
+                    std::string parte;
+                    std::vector<std::string> partes;
+
+                    while (std::getline(ss, parte, ',')) {
+                        partes.push_back(parte);
+                    }
+                    if (partes[8] == "1"){
+                        moneda == "Colones";
+                    }
+                    else{
+                        moneda == "Dolares";
+                    }
+                    cout << partes[0] << "\t" << partes[2]<< "\t" << partes[3]<< "\t" << partes[4]<< "\t" << partes[5]<< "\t\t" << partes[6]<< "\t" << partes[7]<< "\t" << moneda << std::endl;
+                }
+            }
+        }
+    }
+
+    // Cierra el archivo
+    archivo.close();
+}
+
+
 void Prestamos::procesarOpcionPrestamos()
 {
     int opcion = MenusInfoCliente::verificarEntrada(3);
@@ -189,7 +235,9 @@ void Prestamos::procesarOpcionPrestamos()
     switch (opcion)
     {
         case 1:
-            cout << "Opción 1";
+            cout << "\nPréstamos asociados a la cuenta " << id << endl;
+            cout << "Id\tTipo\t\tMonto\tSaldo\tIntéres\tCuotas\tCuotas pagadas" << endl;
+            prestamosAsociados();
             break;
 
         case 2:
@@ -202,6 +250,7 @@ void Prestamos::procesarOpcionPrestamos()
 
     }
 }
+
 
 int main(){
     Prestamos prestamo(901200681);

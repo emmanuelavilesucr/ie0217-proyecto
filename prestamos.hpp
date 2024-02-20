@@ -2,6 +2,9 @@
 #define PRESTAMOS_HPP
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "menusinfoCliente.hpp"
 using namespace std;
 
@@ -18,6 +21,7 @@ class Prestamos: public MenusInfoCliente {
         bool verificarCuenta();
         void procesarOpcionSecun(Datos prestamo);
         bool procesarOpciontercearia();
+        void prestamosAsociados();
 
     protected:
         long long int idPrestamo;
