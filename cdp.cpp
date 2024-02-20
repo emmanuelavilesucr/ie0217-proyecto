@@ -17,34 +17,5 @@ void CDP::ingresarCDP() {
 }
 
 
-// main provisional
-
-int main() {
-    
-    CDP miCDP;
-
-    long long int idCuenta;
-    std::cout << "Ingrese el ID de la cuenta: ";
-    std::cin >> idCuenta;
-    miCDP.setIdCuenta(idCuenta);
-
-
-    double interes;
-    std::cout << "Ingrese el interes: ";
-    std::cin >> interes;
-    miCDP.setInteres(interes);
-
-    double monto;
-    std::cout << "Ingrese el monto: ";
-    std::cin >> monto;
-    miCDP.setMontoCDP(monto);
-
-    miCDP.setTipo("Colones");
-    miCDP.ingresarCDP();
-
-    std::cout << "Se ha ingresado el CDP en el archivo." << std::endl;
-
-    return 0;
-}
 
 
