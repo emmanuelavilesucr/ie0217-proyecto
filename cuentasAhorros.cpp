@@ -142,18 +142,22 @@ void CuentasAhorros::menuAccionesCuenta(){
 
     case 3:
         verficarCantidadCuentas();
+        elegirCuenta();
         break;
 
     case 4:
         verficarCantidadCuentas();
+        elegirCuenta();
         break;
 
     case 5:
         verficarCantidadCuentas();
+        elegirCuenta();
         break;
 
     case 6:
         verficarCantidadCuentas();
+        elegirCuenta();
         break;
 
     case 7:
@@ -234,7 +238,99 @@ void CuentasAhorros::verficarCantidadCuentas(){
         
         } 
         archivo_entrada.close();
-        std::cout << "Este usuario posee: " << cantidad_cuentas << "cuentas" << std::endl;
+        return;
+    } else{
+        std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
+        return;
+    }
+}
+
+void CuentasAhorros::elegirCuenta(){
+    std::ifstream archivo_entrada("cuentasAhorros.txt");
+
+    if (archivo_entrada.is_open()) {
+        long long int id;
+        int tipo_moneda_archivo;
+        double dinero;
+        std::string linea;
+
+        if (cantidad_cuentas == 1){
+            while (std::getline(archivo_entrada, linea)) {
+                std::istringstream ss(linea);
+
+                if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                    if (id == cedula_cliente) {
+                        tipo_moneda = tipo_moneda_archivo;
+                        dinero_cuenta = dinero;
+                        if (tipo_moneda == 1){
+                            std::cout << std::endl;
+                            std::cout << "Usted posee una cuenta en colones" << std::endl;
+                            std::cout << std::endl;
+                            break;
+                        }else{
+                            std::cout << std::endl;
+                            std::cout << "Usted posee una cuenta en dolares" << std::endl;
+                            std::cout << std::endl;
+                            break;
+                        }
+                    }else{
+                        continue;
+                    }
+                } else {
+                    // Hubo un problema al procesar la línea
+                    std::cerr << "Error al procesar la línea: " << linea << std::endl;
+                }
+            
+            }
+        }else if (cantidad_cuentas == 2){
+            int eleccion;
+
+            std::cout << "---Usted posee dos cuentas---" << std::endl;
+            std::cout << "1. Cuenta en colones" << std::endl;
+            std::cout << "2. Cuenta en dolares" << std::endl;
+            std::cout << "Elija una de las dos cuentas con la que desea realizar el trámite: ";
+            std::cin >> eleccion;
+
+            if (std::cin.fail() || eleccion < 1 || eleccion > 2){
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                throw std::runtime_error("No ha elegido una de las cuentas disponibles");
+            }else {
+                tipo_moneda = eleccion;
+                
+                while (std::getline(archivo_entrada, linea)) {
+                std::istringstream ss(linea);
+
+                if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                    if (id == cedula_cliente && tipo_moneda == tipo_moneda_archivo) {
+                        dinero_cuenta = dinero;
+                        if (tipo_moneda == 1){
+                            std::cout << std::endl;
+                            std::cout << "Cuenta en colones elegida" << std::endl;
+                            std::cout << std::endl;
+                            break;
+                        }else {
+                            std::cout << std::endl;
+                            std::cout << "Cuenta en dolares elegida" << std::endl;
+                            std::cout << std::endl;
+                            break;
+                        }
+                    }else{
+                        continue;
+                    }
+                } else {
+                    // Hubo un problema al procesar la línea
+                    std::cerr << "Error al procesar la línea: " << linea << std::endl;
+                }
+            
+            }}
+
+            
+        }
+        archivo_entrada.close();
+        std::cout << id << " , " << tipo_moneda << " , " << dinero_cuenta;
         return;
     } else{
         std::cout << "No se pudo abrir el archivo para lectura." << std::endl;

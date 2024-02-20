@@ -26,6 +26,7 @@ class CuentasAhorros{
         void guardarDatos();
         void verMisCuentas();
         void verficarCantidadCuentas();
+        void elegirCuenta();
 };
 
 #endif
