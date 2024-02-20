@@ -476,6 +476,7 @@ bool CuentasAhorros::tranferirDineroPropia(){
             }
 
             dinero_cuenta = dinero_cuenta - dinero_transferir;
+            dinero_transferir = conversionMoneda(dinero_transferir, tipo_moneda);
             actualizarDatos();
             cantidad_cuentas = 0;
             tipo_moneda = 2;
@@ -502,9 +503,11 @@ bool CuentasAhorros::tranferirDineroPropia(){
             }
 
             dinero_cuenta = dinero_cuenta - dinero_transferir;
+            dinero_transferir = conversionMoneda(dinero_transferir, tipo_moneda);
             actualizarDatos();
             cantidad_cuentas = 0;
             tipo_moneda = 1;
+            
             elegirCuenta();
             dinero_cuenta = dinero_cuenta + dinero_transferir;
             actualizarDatos();
