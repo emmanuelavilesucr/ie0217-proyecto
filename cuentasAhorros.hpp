@@ -20,10 +20,12 @@ class CuentasAhorros{
         long long int cedula_cliente;
         double dinero_cuenta;
         int tipo_moneda;
+        int cantidad_cuentas = 0;
 
         bool verificarCuentaAhorrosRepetida();
         void guardarDatos();
         void verMisCuentas();
+        void verficarCantidadCuentas();
 };
 
 #endif

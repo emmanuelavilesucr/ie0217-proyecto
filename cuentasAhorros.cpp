@@ -141,15 +141,19 @@ void CuentasAhorros::menuAccionesCuenta(){
         break;
 
     case 3:
+        verficarCantidadCuentas();
         break;
 
     case 4:
+        verficarCantidadCuentas();
         break;
 
     case 5:
+        verficarCantidadCuentas();
         break;
 
     case 6:
+        verficarCantidadCuentas();
         break;
 
     case 7:
@@ -197,6 +201,40 @@ void CuentasAhorros::verMisCuentas(){
         
         } 
         archivo_entrada.close();
+        return;
+    } else{
+        std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
+        return;
+    }
+}
+
+void CuentasAhorros::verficarCantidadCuentas(){
+    std::ifstream archivo_entrada("cuentasAhorros.txt");
+
+    if (archivo_entrada.is_open()) {
+        long long int id;
+        int tipo_moneda_archivo;
+        double dinero;
+        std::string linea;
+
+        while (std::getline(archivo_entrada, linea)) {
+            std::istringstream ss(linea);
+
+            if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                if (id == cedula_cliente) {
+                    cantidad_cuentas = cantidad_cuentas + 1;
+                }else{
+                    continue;
+                }
+            } else {
+                // Hubo un problema al procesar la línea
+                std::cerr << "Error al procesar la línea: " << linea << std::endl;
+            }
+        
+        } 
+        archivo_entrada.close();
+        std::cout << "Este usuario posee: " << cantidad_cuentas << "cuentas" << std::endl;
         return;
     } else{
         std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
