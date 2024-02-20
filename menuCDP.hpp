@@ -2,6 +2,7 @@
 #define MENUCDP_HPP
 
 #include "cdp.hpp"
+#include <vector>
 
 class MenuCDP {
     public:
@@ -10,7 +11,8 @@ class MenuCDP {
         void menuSecundario(CDP& cdp);
         void menuPlazos(CDP& cdp);
         void monto(CDP& cdp);
- 
+        
+        void mostrarCDPs();
 
 };
 
