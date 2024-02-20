@@ -55,8 +55,9 @@ void MenuCDP::menuPrincipal() {
     int opcion;
 
     std::cout << "\n --- Certificados de Depósitos ---\n";
-    std::cout << " 1. Crear CDP \n";
-    std::cout << " 2. Ver CDPs\n";
+    std::cout << "1. Crear CDP\n";
+    std::cout << "2. Ver CDPs\n";
+    std::cout << "3. Salir\n";
     std::cout << " Ingrese una opción:\n";
     
     try {
@@ -71,6 +72,10 @@ void MenuCDP::menuPrincipal() {
             case 2:
                 mostrarCDPs();
                 break;
+
+            case 3:
+                break;
+
             default:
                 throw std::runtime_error("La opción elegida no está disponible.");
         }
@@ -155,12 +160,3 @@ void MenuCDP::monto(CDP& cdp) {
     cdp.ingresarCDP();
 }
 
-
-
-// Main de prueba
-
-int main() {
-    MenuCDP menu;
-    menu.menuPrincipal();
-    return 0;
-}
