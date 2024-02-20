@@ -145,7 +145,7 @@ void CuentasAhorros::menuAccionesCuenta(){
         elegirCuenta();
         verificar = deposito();
         if (verificar == true){
-            std::cout << std::fixed << std::setprecision(15) << dinero_cuenta << std::endl;
+            actualizarDatos();
         }
         break;
 
@@ -154,7 +154,7 @@ void CuentasAhorros::menuAccionesCuenta(){
         elegirCuenta();
         verificar = retiro();
         if (verificar == true){
-            std::cout << std::fixed << std::setprecision(15) << dinero_cuenta << std::endl;
+            actualizarDatos();
         }
         break;
 
@@ -177,7 +177,7 @@ void CuentasAhorros::menuAccionesCuenta(){
 }
 
 void CuentasAhorros::verMisCuentas(){
-        std::ifstream archivo_entrada("cuentasAhorros.txt");
+    std::ifstream archivo_entrada("cuentasAhorros.txt");
 
     if (archivo_entrada.is_open()) {
         long long int id;
@@ -383,5 +383,54 @@ bool CuentasAhorros::retiro(){
 
     dinero_cuenta = dinero_cuenta - dinero_retirado;
     return true;
+}
+
+void CuentasAhorros::actualizarDatos(){
+    std::ifstream archivo_lectura("cuentasAhorros.txt");
+    std::ofstream archivo_escritura("cuentasAhorros_temp.txt");
+
+
+    if (archivo_lectura.is_open() && archivo_escritura.is_open()) {
+        long long int id;
+        int tipo_moneda_archivo;
+        double dinero;
+        bool cambio = false;
+        std::string linea;
+
+
+        while (std::getline(archivo_lectura, linea)) {
+            std::istringstream ss(linea);
+
+            if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                if (id == cedula_cliente && tipo_moneda_archivo == tipo_moneda) {
+                    dinero = dinero_cuenta;
+                    cambio = true;
+                    archivo_escritura << id << "," << tipo_moneda_archivo << ","
+                    << std::fixed << std::setprecision(15) << dinero << std::endl;
+                }else{
+                    archivo_escritura << id << "," << tipo_moneda_archivo << ","
+                    << std::fixed << std::setprecision(15) << dinero << std::endl;
+                }
+            } else {
+                // Hubo un problema al procesar la línea
+                std::cerr << "Error al procesar la línea: " << linea << std::endl;
+            }
+        
+        } 
+        archivo_lectura.close();
+        archivo_escritura.close();
+
+        if (cambio) {
+            remove("cuentasAhorros.txt");
+            rename("cuentasAhorros_temp.txt", "cuentasAhorros.txt");
+        } else {
+            remove("cuentasAhorros_temp.txt");
+        }
+        return;
+    } else{
+        std::cout << "No se pudieron abrir los archivos." << std::endl;
+        return;
+    }
 }
 

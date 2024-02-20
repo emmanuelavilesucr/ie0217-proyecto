@@ -29,6 +29,7 @@ class CuentasAhorros{
         void elegirCuenta();
         bool deposito();
         bool retiro();
+        void actualizarDatos();
 };
 
 #endif
