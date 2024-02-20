@@ -161,6 +161,7 @@ void CuentasAhorros::menuAccionesCuenta(){
     case 5:
         verficarCantidadCuentas();
         elegirCuenta();
+        verificar = tranferirDineroPropia();
         break;
 
     case 6:
@@ -276,7 +277,7 @@ void CuentasAhorros::elegirCuenta(){
                             std::cout << "Usted posee una cuenta en colones" << std::endl;
                             std::cout << std::endl;
                             break;
-                        }else{
+                        }else if (tipo_moneda == 2){
                             std::cout << std::endl;
                             std::cout << "Usted posee una cuenta en dolares" << std::endl;
                             std::cout << std::endl;
@@ -308,34 +309,44 @@ void CuentasAhorros::elegirCuenta(){
                 tipo_moneda = eleccion;
                 
                 while (std::getline(archivo_entrada, linea)) {
+                    std::istringstream ss(linea);
+
+                    if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                        if (id == cedula_cliente && tipo_moneda == tipo_moneda_archivo) {
+                            dinero_cuenta = dinero;
+                            if (tipo_moneda == 1){
+                                std::cout << std::endl;
+                                std::cout << "Cuenta en colones elegida" << std::endl;
+                                std::cout << std::endl;
+                                break;
+                            }else {
+                                std::cout << std::endl;
+                                std::cout << "Cuenta en dolares elegida" << std::endl;
+                                std::cout << std::endl;
+                                break;
+                            }
+                        }else{
+                            continue;
+                        }
+                    } else {
+                        // Hubo un problema al procesar la línea
+                        std::cerr << "Error al procesar la línea: " << linea << std::endl;
+                    }
+                }
+            }
+            
+        }else if (cantidad_cuentas == 0){
+            while (std::getline(archivo_entrada, linea)) {
                 std::istringstream ss(linea);
 
                 if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
 
                     if (id == cedula_cliente && tipo_moneda == tipo_moneda_archivo) {
                         dinero_cuenta = dinero;
-                        if (tipo_moneda == 1){
-                            std::cout << std::endl;
-                            std::cout << "Cuenta en colones elegida" << std::endl;
-                            std::cout << std::endl;
-                            break;
-                        }else {
-                            std::cout << std::endl;
-                            std::cout << "Cuenta en dolares elegida" << std::endl;
-                            std::cout << std::endl;
-                            break;
-                        }
-                    }else{
-                        continue;
                     }
-                } else {
-                    // Hubo un problema al procesar la línea
-                    std::cerr << "Error al procesar la línea: " << linea << std::endl;
                 }
-            
-            }}
-
-            
+            }
         }
         archivo_entrada.close();
         return;
@@ -434,3 +445,64 @@ void CuentasAhorros::actualizarDatos(){
     }
 }
 
+bool CuentasAhorros::tranferirDineroPropia(){
+    double dinero_transferir = 0;
+    
+    if (cantidad_cuentas == 1){
+        std::cout << "Usted solo posee una cuenta, no puede realizar este proceso" << std::endl;
+    } else{
+        if (tipo_moneda == 1){
+           std::cout << "Digite la cantidad de dinero de su cuenta en colones que desea tranferir a su cuenta en dólares:  ";
+           std::cin >> dinero_transferir;
+           
+           if (std::cin.fail() || dinero_transferir < 0){
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Ha elegido una cantidad de dinero erronea a retirar" << std::endl;
+                std::cout << std::endl;
+                return false;
+
+            }else if (dinero_transferir > dinero_cuenta){
+                std::cout << "Su cuenta posee menos dinero del que pide retirar" << std::endl;
+                std::cout << std::endl;
+                return false;
+
+            }
+
+            dinero_cuenta = dinero_cuenta - dinero_transferir;
+            actualizarDatos();
+            cantidad_cuentas = 0;
+            tipo_moneda = 2;
+            elegirCuenta();
+            dinero_cuenta = dinero_cuenta + dinero_transferir;
+            actualizarDatos();
+            return true;
+        }else{
+            std::cout << "Digite la cantidad de dinero de su cuenta en dólares que desea tranferir a su cuenta en colones:  ";
+            std::cin >> dinero_transferir;
+            
+            if (std::cin.fail() || dinero_transferir < 0){
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Ha elegido una cantidad de dinero erronea a retirar" << std::endl;
+                std::cout << std::endl;
+                return false;
+
+            }else if (dinero_transferir > dinero_cuenta){
+                std::cout << "Su cuenta posee menos dinero del que pide retirar" << std::endl;
+                std::cout << std::endl;
+                return false;
+
+            }
+
+            dinero_cuenta = dinero_cuenta - dinero_transferir;
+            actualizarDatos();
+            cantidad_cuentas = 0;
+            tipo_moneda = 1;
+            elegirCuenta();
+            dinero_cuenta = dinero_cuenta + dinero_transferir;
+            actualizarDatos();
+            return true;
+        }
+    }
+}

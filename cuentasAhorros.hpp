@@ -30,6 +30,7 @@ class CuentasAhorros{
         bool deposito();
         bool retiro();
         void actualizarDatos();
+        bool tranferirDineroPropia();
 };
 
 #endif
