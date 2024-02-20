@@ -207,7 +207,7 @@ bool Interfaz::verificarCuenta() {
             if (pos != std::string::npos) {
                 std::string nombre = nombre_usuario.substr(pos + 1);
                 std::cout << std::endl;
-                std::cout << "Bienvenido: " << nombre << std::endl;
+                std::cout << "Bienvenido/a: " << nombre << std::endl;
                 std:: cout << std::endl;
                 accionesCliente(cedula);
             }

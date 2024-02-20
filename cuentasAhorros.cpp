@@ -145,6 +145,7 @@ void CuentasAhorros::menuAccionesCuenta(){
         elegirCuenta();
         verificar = deposito();
         if (verificar == true){
+            std::cout << "Depósito completado" << std::endl;
             actualizarDatos();
         }
         break;
@@ -154,6 +155,7 @@ void CuentasAhorros::menuAccionesCuenta(){
         elegirCuenta();
         verificar = retiro();
         if (verificar == true){
+            std::cout << "Retiro completado" << std::endl;
             actualizarDatos();
         }
         break;
@@ -162,6 +164,10 @@ void CuentasAhorros::menuAccionesCuenta(){
         verficarCantidadCuentas();
         elegirCuenta();
         verificar = tranferirDineroPropia();
+        if (verificar == true){
+            std::cout << "Transferencia completada" << std::endl;
+            actualizarDatos();
+        }
         break;
 
     case 6:
