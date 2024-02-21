@@ -6,8 +6,33 @@
 #include <iomanip> 
 #include <vector>
 
-CDP::CDP(long long int cedula) : cedula_cliente(cedula) {}
+/**
+ * @file cdp.cpp
+ * @brief Funcionalidades del los diferentes métodos de la clase CDP.
+ * 
+ * @license 
+ * Copyright 2024 [Brenda Natalia Castro Jiménez, Emanuel Avilés Ramírez, Luis José Brenes Campos]
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+*/
 
+
+CDP::CDP(long long int cedula) : cedula_cliente(cedula) {} // Constructo de la clase CDP
+
+/**
+ * @brief Ingresar nuevos certificados de depositos.
+ */
 void CDP::ingresarCDP(){
     std::ofstream archivo("CDP.txt", std::ios::app);
     if (archivo.is_open()) {
@@ -18,6 +43,10 @@ void CDP::ingresarCDP(){
     }
 }
 
+/**
+ * @brief Muestra el menu principal al usuario 
+ * Permite al usuario realizar operaciones respecto a los CDPs.
+ */
 void CDP::menuPrincipal(){
     int opcion;
     std::cout << "\n --- Certificados de Depósitos ---\n";
@@ -46,6 +75,9 @@ void CDP::menuPrincipal(){
     }
 }
 
+/**
+ * @brief Muestra al usuario un menu con el tipo de divisas al crear un CDP.
+ */
 void CDP::menuSecundario() {   
     int opcion_divisa;
     std::cout << "\n --- Tipo de Divisa: ---\n";
@@ -71,6 +103,9 @@ void CDP::menuSecundario() {
     }
 }
 
+/**
+ * @brief Muestra al usuario un menu con los plazos y intereses al crear un nuevo CDP.
+ */
 void CDP::menuPlazos() {
     int opcion_plazo;
     std::cout << "\n --- Plazos: ---\n";
@@ -104,14 +139,22 @@ void CDP::menuPlazos() {
     }
 }
 
+
+/**
+ * @brief El usuario ingresa el monto de los nuevos CDPs.
+ */
 void CDP::monto() {
     double monto;
     std::cout << "Ingrese el monto: ";
     std::cin >> monto;
     montoCDP = monto; 
-    ingresarCDP(); 
+    ingresarCDP();  // Almacena los datos ingresados por el usuario en el archivo txt
 }
 
+/**
+ * @brief Muestra todos los CDPs activos de cada cliente.
+ * Se abre y lee el archivo txt y muestra la información de los CDPs del cliente actual.
+ */
 void CDP::mostrarCDPs(){
     std::ifstream archivo_entrada("CDP.txt");
     if (archivo_entrada.is_open()) {
@@ -134,17 +177,20 @@ void CDP::mostrarCDPs(){
             while (std::getline(ss, token, ',')) {
                 tokens.push_back(token);
             }
-
+            
+            // Se realiza un verificacion de la cantidad de tokens para procesar una linea
             if (tokens.size() >= 5) {
+                // Se realiza la conversion de tokens a los tipos
                 id = std::stoll(tokens[0]);
                 dinero = std::stod(tokens[1]);
                 interes = std::stoi(tokens[2]);
                 tipo_moneda = tokens[3];
                 plazo = std::stoi(tokens[4]);
 
+                // Se verifica si el ID coincide con el del cliente
                 if (id == cedula_cliente) {
                     std::cout << "ID de cuenta: " << id << std::endl;
-                    std::cout << "Saldo: " << std::fixed << std::setprecision(0) << dinero << std::endl;
+                    std::cout << "Saldo: " << std::fixed << std::setprecision(0) << dinero << std::endl;  
                     std::cout << "Tipo de moneda: " << tipo_moneda << std::endl;
                     std::cout << "Interés: " << interes << "%" << std::endl;
                     std::cout << "Plazo: " << plazo << " meses" << std::endl;
