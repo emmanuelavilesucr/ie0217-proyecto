@@ -111,6 +111,7 @@ void CuentasAhorros::guardarDatos(){
 void CuentasAhorros::menuAccionesCuenta(){
     int opcion;
     bool verificar;
+    double cuenta_otro = 0;
 
     std::cout << std::endl;
     std::cout << "---Posibles Opciones a realizar---" << std::endl;
@@ -173,6 +174,16 @@ void CuentasAhorros::menuAccionesCuenta(){
     case 6:
         verficarCantidadCuentas();
         elegirCuenta();
+        cuenta_otro = elegirOtroUsuario();
+        if (cuenta_otro != 0){
+            cedula_cliente_otro = cuenta_otro;
+            verficarCantidadCuentas();
+            elegirCuenta();
+            std::cout << "Mis cuentas:" << cantidad_cuentas << " , " << cedula_cliente << " , " << tipo_moneda << " , " << dinero_cuenta << std::endl;
+            std::cout << "Tus cuentas:" << cantidad_cuentas_otro << " , " << cedula_cliente_otro << " , " << tipo_moneda_otro << " , " << dinero_cuenta_otro << std::endl;
+        }else{
+            std::cout << "Tranferencia a otro usuario no realizada" << std::endl;
+        }
         break;
 
     case 7:
@@ -241,8 +252,10 @@ void CuentasAhorros::verficarCantidadCuentas(){
 
             if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
 
-                if (id == cedula_cliente) {
+                if (id == cedula_cliente  && cedula_cliente_otro == 0) {
                     cantidad_cuentas = cantidad_cuentas + 1;
+                }else if (id == cedula_cliente_otro){
+                    cantidad_cuentas_otro = cantidad_cuentas_otro + 1;
                 }else{
                     continue;
                 }
@@ -269,7 +282,7 @@ void CuentasAhorros::elegirCuenta(){
         double dinero;
         std::string linea;
 
-        if (cantidad_cuentas == 1){
+        if (cantidad_cuentas == 1 && cantidad_cuentas_otro == 0){
             while (std::getline(archivo_entrada, linea)) {
                 std::istringstream ss(linea);
 
@@ -298,7 +311,7 @@ void CuentasAhorros::elegirCuenta(){
                 }
             
             }
-        }else if (cantidad_cuentas == 2){
+        }else if (cantidad_cuentas == 2 && cantidad_cuentas_otro == 0){
             int eleccion;
 
             std::cout << "---Usted posee dos cuentas---" << std::endl;
@@ -342,7 +355,7 @@ void CuentasAhorros::elegirCuenta(){
                 }
             }
             
-        }else if (cantidad_cuentas == 0){
+        }else if (cantidad_cuentas == 0 && cantidad_cuentas_otro == 0){
             while (std::getline(archivo_entrada, linea)) {
                 std::istringstream ss(linea);
 
@@ -353,6 +366,79 @@ void CuentasAhorros::elegirCuenta(){
                     }
                 }
             }
+        }else if (cantidad_cuentas_otro == 1){
+            while (std::getline(archivo_entrada, linea)) {
+                std::istringstream ss(linea);
+
+                if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                    if (id == cedula_cliente_otro) {
+                        tipo_moneda_otro = tipo_moneda_archivo;
+                        dinero_cuenta_otro = dinero;
+                        if (tipo_moneda_otro == 1){
+                            std::cout << std::endl;
+                            std::cout << "El otro usuario posee una cuenta en colones" << std::endl;
+                            std::cout << std::endl;
+                            break;
+                        }else if (tipo_moneda_otro == 2){
+                            std::cout << std::endl;
+                            std::cout << "El otro usuario posee una cuenta en dolares" << std::endl;
+                            std::cout << std::endl;
+                            break;
+                        }
+                    }else{
+                        continue;
+                    }
+                } else {
+                    // Hubo un problema al procesar la línea
+                    std::cerr << "Error al procesar la línea: " << linea << std::endl;
+                }
+            
+            }
+        }else if (cantidad_cuentas_otro == 2){
+            int eleccion;
+
+            std::cout << "---El otro usuario posee dos cuentas---" << std::endl;
+            std::cout << "1. Cuenta en colones" << std::endl;
+            std::cout << "2. Cuenta en dolares" << std::endl;
+            std::cout << "Elija la cuenta del otro usuario a la que desea realizar el trámite: ";
+            std::cin >> eleccion;
+
+            if (std::cin.fail() || eleccion < 1 || eleccion > 2){
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                throw std::runtime_error("No ha elegido una de las cuentas del otro usuario disponibles");
+            }else {
+                tipo_moneda_otro = eleccion;
+                
+                while (std::getline(archivo_entrada, linea)) {
+                    std::istringstream ss(linea);
+
+                    if (ss >> id >> std::ws && ss.ignore() && ss >> tipo_moneda_archivo >> std::ws && ss.ignore() && ss >> dinero) {
+
+                        if (id == cedula_cliente_otro && tipo_moneda_otro == tipo_moneda_archivo) {
+                            dinero_cuenta_otro = dinero;
+                            if (tipo_moneda_otro == 1){
+                                std::cout << std::endl;
+                                std::cout << "Cuenta en colones del otro usuario elegida" << std::endl;
+                                std::cout << std::endl;
+                                break;
+                            }else {
+                                std::cout << std::endl;
+                                std::cout << "Cuenta en dolares del otro usuario elegida" << std::endl;
+                                std::cout << std::endl;
+                                break;
+                            }
+                        }else{
+                            continue;
+                        }
+                    } else {
+                        // Hubo un problema al procesar la línea
+                        std::cerr << "Error al procesar la línea: " << linea << std::endl;
+                    }
+                }
+            }
+            
         }
         archivo_entrada.close();
         return;
@@ -520,4 +606,64 @@ bool CuentasAhorros::tranferirDineroPropia(){
             return true;
         }
     }
+}
+
+long long int CuentasAhorros::elegirOtroUsuario(){
+    std::string nombre;
+    std::string cedula_str;
+
+    const std::regex regex_id("^[0-9]{9}$");
+
+    do {
+        std::cout << "Ingrese la cédula del otro usuario: ";
+        std::cin >> cedula_str;
+
+        if (!std::regex_match(cedula_str, regex_id)) {
+            std::cout << "Cédula inválida. Debe contener 9 dígitos numericos." << std::endl;
+        }
+    } while (!std::regex_match(cedula_str, regex_id));
+
+    long long int cedula = std::stoll(cedula_str);
+
+    if (cedula == cedula_cliente){
+        std::cout << "La cédula elegida es la suya." << std::endl;
+        std::cout << "Si su objetivo es realizar una trasferencia entre sus cuentas, utilice la opción 5." << std::endl;
+        return 0;
+    }
+
+    std::ifstream archivo_entrada("clientes.txt");
+
+    if (!archivo_entrada.is_open()) {
+        std::cout << "Sistema fuera de servicio. No se puede acceder a la base de datos" << std::endl;
+        return 0;
+    }
+
+    long long int id;
+    std::string nombre_usuario;
+    bool encontrado = false;
+
+    while (archivo_entrada >> id && std::getline(archivo_entrada, nombre_usuario)) {
+        if (id == cedula) {
+            encontrado = true;
+            archivo_entrada.close();
+
+            size_t pos = nombre_usuario.find(',');
+            if (pos != std::string::npos) {
+                std::string nombre = nombre_usuario.substr(pos + 1);
+                std::cout << std::endl;
+                std::cout << "Nombre del usuario a tranferir dinero: " << nombre << std::endl;
+                std:: cout << std::endl;
+                return cedula;
+            }
+            return 0;
+        }
+    }
+
+    archivo_entrada.close();
+
+    if (!encontrado) {
+        std::cout << "La cédula ingresada no pertenece a ningún usuario" << std::endl;
+    }
+
+    return 0;
 }
