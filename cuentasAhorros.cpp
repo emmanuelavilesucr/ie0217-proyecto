@@ -209,7 +209,7 @@ void CuentasAhorros::menuAccionesCuenta(){
         }
         break;
 
-    case 4:
+    case 4: 
         verficarCantidadCuentas();
         elegirCuenta();
         verificar = retiro(0);
@@ -583,8 +583,14 @@ bool CuentasAhorros::retiro(double retirar){
         dinero_cuenta = dinero_cuenta - dinero_retirado;
         return true;
     }else{
-       dinero_cuenta = dinero_cuenta - retirar;
-        return true; 
+        if (retirar > dinero_cuenta){
+            std::cout << "Su cuenta posee menos dinero del que pide retirar" << std::endl;
+            std::cout << std::endl;
+            return false;
+        }else{
+            dinero_cuenta = dinero_cuenta - retirar;
+            return true;
+        } 
     }
 
     

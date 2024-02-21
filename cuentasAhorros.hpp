@@ -41,6 +41,14 @@ class CuentasAhorros{
         bool crearCuenta();
         // Método para presentar las acciones que se pueden realizar con una cuenta de ahorros
         void menuAccionesCuenta();
+        // Verifica la cantidad de cuentas que posee un usuario
+        void verficarCantidadCuentas();
+        // Se encarga de realizar un retiro
+        bool retiro(double retiro);
+        // Actualiza los datos en caso de que se realice un trámite
+        void actualizarDatos();
+        // Se encarga de elegir la cuenta con la que el usuario decide realizar un trámite
+        void elegirCuenta();
     
     private:
         /**
@@ -68,16 +76,8 @@ class CuentasAhorros{
         void guardarDatos();
         // Imprime las cuentas de ahorros que posee el usuario
         void verMisCuentas();
-        // Verifica la cantidad de cuentas que posee un usuario
-        void verficarCantidadCuentas();
-        // Se encarga de elegir la cuenta con la que el usuario decide realizar un trámite
-        void elegirCuenta();
         // Se encarga de realizar un depósito
         bool deposito();
-        // Se encarga de realizar un retiro
-        bool retiro(double retiro);
-        // Actualiza los datos en caso de que se realice un trámite
-        void actualizarDatos();
         // Tranfiere dinero de una cuenta elegida a la otra cuenta que se posee en caso de poseer 2
         bool tranferirDineroPropia();
         // Elección del otro usuario para tranferirle dinero
