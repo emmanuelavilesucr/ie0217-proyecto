@@ -4,6 +4,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <iomanip> 
+#include <vector>
 
 CDP::CDP(long long int cedula) : cedula_cliente(cedula) {}
 
@@ -112,32 +113,49 @@ void CDP::monto() {
 }
 
 void CDP::mostrarCDPs(){
-    std::ifstream archivo("CDP.txt");
-    if (archivo.is_open()) {
+    std::ifstream archivo_entrada("CDP.txt");
+    if (archivo_entrada.is_open()) {
+        long long int id;
+        double dinero;
+        std::string tipo_moneda;
+        int plazo;
+        int interes;
+
+        std::cout << std::endl;
+        std::cout << "CDPs activos: " << cedula_cliente << std::endl;
+        std::cout << "--------------------" << std::endl;
+
         std::string linea;
-        while (std::getline(archivo, linea)) {
+        while (std::getline(archivo_entrada, linea)) {
             std::istringstream ss(linea);
-            std::string idCuentaStr, montoStr, interesStr, tipoStr, plazoStr; 
-            if (std::getline(ss, idCuentaStr, ',') &&
-                std::getline(ss, montoStr, ',') &&
-                std::getline(ss, interesStr, ',') &&
-                std::getline(ss, tipoStr, ',') && 
-                std::getline(ss, plazoStr)) { 
-                long long int idCuenta = std::stoll(idCuentaStr);
-                double monto = std::stod(montoStr);
-                double interes = std::stod(interesStr);
-                int plazo = std::stoi(plazoStr); 
-                
-                std::cout << "ID de Cuenta: " << idCuenta << std::endl;
-                std::cout << "Tipo de Divisa: " << tipoStr << std::endl;
-                std::cout << "Interés: " << interes << "%" << std::endl;
-                std::cout << "Monto: " << monto << std::endl;
-                std::cout << "Plazo: " << plazo << " meses" << std::endl; 
-                std::cout << std::endl;
+            std::string token;
+            std::vector<std::string> tokens;
+
+            while (std::getline(ss, token, ',')) {
+                tokens.push_back(token);
+            }
+
+            if (tokens.size() >= 5) {
+                id = std::stoll(tokens[0]);
+                dinero = std::stod(tokens[1]);
+                interes = std::stoi(tokens[2]);
+                tipo_moneda = tokens[3];
+                plazo = std::stoi(tokens[4]);
+
+                if (id == cedula_cliente) {
+                    std::cout << "ID de cuenta: " << id << std::endl;
+                    std::cout << "Saldo: " << std::fixed << std::setprecision(0) << dinero << std::endl;
+                    std::cout << "Tipo de moneda: " << tipo_moneda << std::endl;
+                    std::cout << "Interés: " << interes << "%" << std::endl;
+                    std::cout << "Plazo: " << plazo << " meses" << std::endl;
+                    std::cout << "------------------------------" << std::endl;
+                }
+            } else {
+                std::cerr << "Error al procesar la línea: " << linea << std::endl;
             }
         }
-        archivo.close();
+        archivo_entrada.close();
     } else {
-        std::cerr << "No se pudo abrir el archivo CDP.txt." << std::endl;
+        std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
     }
 }
