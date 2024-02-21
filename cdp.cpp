@@ -3,19 +3,19 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <iomanip> 
 
 CDP::CDP(long long int cedula) : cedula_cliente(cedula) {}
 
 void CDP::ingresarCDP(){
     std::ofstream archivo("CDP.txt", std::ios::app);
-    if (archivo.is_open()) {     
-        archivo << this->cedula_cliente << "," << montoCDP << "," << interes << "," << tipo << "," << plazo << std::endl;   
+    if (archivo.is_open()) {
+        archivo << cedula_cliente << "," << std::fixed << std::setprecision(0) << montoCDP << "," << interes << "," << tipo << "," << plazo << std::endl;
         archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
     }
 }
-
 
 void CDP::menuPrincipal(){
     int opcion;
@@ -26,7 +26,7 @@ void CDP::menuPrincipal(){
     std::cout << "Ingrese una opción:\n";
     try {
         std::cin >> opcion;
-        
+
         switch (opcion) {
             case 1: {
                 menuSecundario(); 
@@ -44,7 +44,6 @@ void CDP::menuPrincipal(){
         std::cerr << "Error detectado: " << e.what() << std::endl;
     }
 }
-
 
 void CDP::menuSecundario() {   
     int opcion_divisa;
@@ -103,7 +102,6 @@ void CDP::menuPlazos() {
         std::cerr << "Error detectado: " << e.what() << std::endl;
     }
 }
-
 
 void CDP::monto() {
     double monto;
