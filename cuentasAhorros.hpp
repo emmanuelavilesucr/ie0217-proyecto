@@ -38,6 +38,7 @@ class CuentasAhorros{
         void actualizarDatos();
         bool tranferirDineroPropia();
         long long int elegirOtroUsuario();
+        bool tranferirDineroOtro();
 };
 
 #endif

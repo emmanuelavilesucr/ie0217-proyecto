@@ -179,8 +179,7 @@ void CuentasAhorros::menuAccionesCuenta(){
             cedula_cliente_otro = cuenta_otro;
             verficarCantidadCuentas();
             elegirCuenta();
-            std::cout << "Mis cuentas:" << cantidad_cuentas << " , " << cedula_cliente << " , " << tipo_moneda << " , " << dinero_cuenta << std::endl;
-            std::cout << "Tus cuentas:" << cantidad_cuentas_otro << " , " << cedula_cliente_otro << " , " << tipo_moneda_otro << " , " << dinero_cuenta_otro << std::endl;
+            tranferirDineroOtro();
         }else{
             std::cout << "Tranferencia a otro usuario no realizada" << std::endl;
         }
@@ -517,6 +516,11 @@ void CuentasAhorros::actualizarDatos(){
                     cambio = true;
                     archivo_escritura << id << "," << tipo_moneda_archivo << ","
                     << std::fixed << std::setprecision(15) << dinero << std::endl;
+                }else if(id == cedula_cliente_otro && tipo_moneda_archivo == tipo_moneda_otro){
+                    dinero = dinero_cuenta_otro;
+                    cambio = true;
+                    archivo_escritura << id << "," << tipo_moneda_archivo << ","
+                    << std::fixed << std::setprecision(15) << dinero << std::endl;
                 }else{
                     archivo_escritura << id << "," << tipo_moneda_archivo << ","
                     << std::fixed << std::setprecision(15) << dinero << std::endl;
@@ -666,4 +670,36 @@ long long int CuentasAhorros::elegirOtroUsuario(){
     }
 
     return 0;
+}
+
+bool CuentasAhorros::tranferirDineroOtro(){
+    double dinero_transferir = 0;
+    
+    std::cout << "Digite la cantidad de dinero que quiere transferir de su cuenta a la cuenta del otro usuario:  ";
+    std::cin >> dinero_transferir;
+    
+    if (std::cin.fail() || dinero_transferir < 0){
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Ha elegido una cantidad de dinero erronea a retirar" << std::endl;
+            std::cout << std::endl;
+            return false;
+
+        }else if (dinero_transferir > dinero_cuenta){
+            std::cout << "Su cuenta posee menos dinero del que pide retirar" << std::endl;
+            std::cout << std::endl;
+            return false;
+
+        }
+
+        dinero_cuenta = dinero_cuenta - dinero_transferir;
+        actualizarDatos();
+        if (tipo_moneda != tipo_moneda_otro){
+            dinero_transferir = conversionMoneda(dinero_transferir, tipo_moneda);
+            dinero_cuenta_otro = dinero_cuenta_otro + dinero_transferir;
+        }else {
+            dinero_cuenta_otro = dinero_cuenta_otro + dinero_transferir;
+        }
+        actualizarDatos();
+        return true;
 }
