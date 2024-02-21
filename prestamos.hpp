@@ -7,6 +7,7 @@
 #include <string>
 #include <cmath>
 #include <iomanip>
+#include <cstdio>
 #include "menusinfoCliente.hpp"
 using namespace std;
 
@@ -25,7 +26,8 @@ class Prestamos: public MenusInfoCliente {
         bool procesarOpciontercearia();
         void prestamosAsociados();
         void pagarCuota(long long int idPrestamo);
-        void obtenerPagos(long long int idPrestamo);
+        void abonarCapital(long long int idPrestamo);
+        void obtenerPagos(long long int idPrestamo, double opc);
         void actualizarDatos(long long int idPrestamo, int opc);
 
     protected:
@@ -42,6 +44,7 @@ class Prestamos: public MenusInfoCliente {
         double amortizacionPrincipal;
         double saldoRestante;
         double cuotasPagadas;
+        double devolver;
         //int cuotas;
 };
 #endif

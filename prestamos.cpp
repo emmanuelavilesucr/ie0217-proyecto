@@ -24,7 +24,7 @@ void Prestamos::menuPrincipal()
 }
 
 bool Prestamos::procesarOpciontercearia(){
-    cout << "\n--Tipos de moneda--\n1.Colones\n2.Dolares\n";
+    std::cout << "\n--Tipos de moneda--\n1.Colones\n2.Dolares\n";
     int opcion2 = verificarEntrada(2);
     //if (opcion2 == 0){
      //   return;
@@ -65,8 +65,8 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
             try{
                 idPrestamo = generarNuevoID();
                 moneda = procesarOpciontercearia();
-                cout<<"Ingrese el monto que desea consultar: ";
-                cin>>monto;
+                std::cout<<"Ingrese el monto que desea consultar: ";
+                std::cin>>monto;
                 if (std::cin.fail()){
                     throw std::runtime_error("No es un dato válido para el monto");
                 }
@@ -84,8 +84,8 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
             try{
                 idPrestamo = generarNuevoID();
                 moneda = procesarOpciontercearia();
-                cout<<"Ingrese el monto que desea consultar: ";
-                cin>>monto;
+                std::cout<<"Ingrese el monto que desea consultar: ";
+                std::cin>>monto;
                 if (std::cin.fail()){
                     throw std::runtime_error("No es un dato válido para el monto");
                 }
@@ -102,8 +102,8 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
             try{
                 idPrestamo = generarNuevoID();
                 moneda = procesarOpciontercearia();
-                cout<<"Ingrese el monto que desea consultar: ";
-                cin>>monto;
+                std::cout<<"Ingrese el monto que desea consultar: ";
+                std::cin>>monto;
                 if (std::cin.fail()){
                     throw std::runtime_error("No es un dato válido para el monto");
                 }
@@ -214,7 +214,7 @@ void Prestamos::prestamosAsociados()
                     else{
                         moneda == "Dolares";
                     }
-                    cout << partes[0] << "\t" << partes[2]<< "\t" << partes[3]<< "\t" << partes[4]<< "\t" << partes[5]<< "\t\t" << partes[6]<< "\t" << partes[7]<< "\t" << moneda << std::endl;
+                    std::cout << partes[0] << "\t" << partes[2]<< "\t" << partes[3]<< "\t" << partes[4]<< "\t" << partes[5]<< "\t\t" << partes[6]<< "\t" << partes[7]<< "\t" << moneda << std::endl;
                 }
             }
         }
@@ -224,7 +224,7 @@ void Prestamos::prestamosAsociados()
     archivo.close();
 }
 
-void Prestamos::obtenerPagos(long long int idPrestamo){
+void Prestamos::obtenerPagos(long long int idPrestamo, double opc){
     std::ifstream archivo_entrada("prestamos.txt");
     std::string linea;
     while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
@@ -240,14 +240,27 @@ void Prestamos::obtenerPagos(long long int idPrestamo){
             cuotaMensual = (tasaInteresMensual * std::stod(partes[3])) / (1 - pow((1 + tasaInteresMensual), -std::stod(partes[6])));
             interesPendiente = std::stod(partes[4]) * tasaInteresMensual;
             amortizacionPrincipal = cuotaMensual - interesPendiente;
-            saldoRestante = std::stod(partes[4]) - amortizacionPrincipal;
+            if (opc == 0){
+                saldoRestante = std::stod(partes[4]) - amortizacionPrincipal;
+            }
+            else{
+                saldoRestante = std::stod(partes[4]) - opc;
+            }
             cuotasPagadas = std::stoi(partes[7]) + 1;
+
+            if (std::stod(partes[4]) > 0){
+                actualizarDatos(idPrestamo, opc);
+            }
+            else{
+                std::cout << "El préstamo ya ha sido cancelado";
+            }
             // Saldorestante =  Saldorestante -amortizacionPrincipal
             // cuotas pagadas +1
         }
         //float tasaInteresMensual = tasaInteresAnual / 12 / 100; // Calcula la tasa de interés mensual.
         //float cuotaMensual = (tasaInteresMensual * montoPrestamo) / (1 - pow((1 + tasaInteresMensual), -numCuotas));
     }
+    archivo_entrada.close();
 
 }
 
@@ -266,7 +279,6 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
         bool cambio = false;
         std::string linea;
 
-
         while (archivo_lectura >> id && std::getline(archivo_lectura, linea)) {
             if (id == idPrestamo){
                 std::istringstream ss(linea);
@@ -276,13 +288,22 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
                 while (std::getline(ss, parte, ',')) {
                     partes.push_back(parte);
                 }
-                partes[4] = std::to_string(saldoRestante);
-                if (opc == 1){
+                if (saldoRestante > 0){
+                    partes[4] = std::to_string(saldoRestante);
+                    devolver = 0;
+                }
+                else{
+                    partes[4] = "0";
+                    std::cout << "Su préstamo ha sido cancelado";
+                    cuotaMensual = cuotaMensual + saldoRestante;
+                    devolver = saldoRestante * (-1);
+                }
+                if (opc == 0){
                         partes[7] = std::to_string(cuotasPagadas);
                 }
-                cambio = true;
                 archivo_escritura << id << "," << partes[1] << "," << partes[2] << "," << std::fixed << std::setprecision(15) << partes[3] << ","
                 << std::fixed << std::setprecision(15) << partes[4] << ","<< partes[5] << ","<< partes[6] << ","<< partes[7] << ","<< partes[8] << std::endl;
+                cambio = true;
             }
             else{
                 std::istringstream ss(linea);
@@ -301,10 +322,13 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
         archivo_escritura.close();
 
         if (cambio) {
-            remove("prestamos.txt");
-            rename("prestamos_temp.txt", "prestamos.txt");
+            std::cout << "Holaaa";
+            //remove("prestamos.txt");
+            std::remove("prestamos.txt");
+            std::cout << "Quepasa";
+            std::rename("prestamos_temp.txt", "prestamos.txt");
         } else {
-            remove("prestamos_temp.txt");
+            std::remove("prestamos_temp.txt");
         }
         return;
     } else{
@@ -315,20 +339,42 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
 
 void Prestamos::pagarCuota(long long int idPrestamo)
 {
-    cout << "\n-- Eliga el método de pago --" << endl;
-    cout << "1.Efectivo\n2.Transferencia" << endl;
+    std::cout << "\n-- Eliga el método de pago --" << endl;
+    std::cout << "1.Efectivo\n2.Transferencia" << endl;
     int opcion = MenusInfoCliente::verificarEntrada(2);
     switch (opcion)
     {
         case 1:
-            obtenerPagos(idPrestamo);
-            actualizarDatos(idPrestamo, 1);
+            obtenerPagos(idPrestamo, 0);
             break;
 
         default:
-            obtenerPagos(idPrestamo);
-            // Restarle al archivo de cuentas la cuota mensual
-            cout << "Opción 2";
+            // Restarle al archivo de cuentas la cuota mensual cuotaMensual Verificar si la cuenta está en dolares atributo  tipo_moneda
+            obtenerPagos(idPrestamo, 0);
+            // Lllamar retiro con cuotaMensual
+            break;
+    }
+}
+
+
+void Prestamos::abonarCapital(long long int idPrestamo)
+{
+    std::cout << "\n-- Eliga el método de pago --" << endl;
+    std::cout << "1.Efectivo\n2.Transferencia" << endl;
+    int opcion = MenusInfoCliente::verificarEntrada(2);
+    double abonoCapital;
+    std::cout << "Ingrese el monto que desea abonar al cápital: ";
+    std::cin >> abonoCapital;
+    switch (opcion)
+    {
+        case 1:
+            obtenerPagos(idPrestamo, abonoCapital);
+            break;
+
+        default:
+            obtenerPagos(idPrestamo, abonoCapital);
+            // llamar retiro con abonocapital / Verificar si la cuenta está en dolares atributo  tipo_moneda
+            // if devolver != 0 llama depositar con devolver
             break;
     }
 }
@@ -345,8 +391,8 @@ void Prestamos::procesarOpcionPrestamos()
     switch (opcion)
     {
         case 1:
-            cout << "\nPréstamos asociados a la cuenta " << id << endl;
-            cout << "Id\tTipo\t\tMonto\tSaldo\tIntéres\tCuotas\tCuotas pagadas" << endl;
+            std::cout << "\nPréstamos asociados a la cuenta " << id << endl;
+            std::cout << "Id\tTipo\t\tMonto\tSaldo\tIntéres\tCuotas\tCuotas pagadas" << endl;
             prestamosAsociados();
             break;
 
@@ -356,8 +402,8 @@ void Prestamos::procesarOpcionPrestamos()
             break;
         default:
             try{
-                cout<<"Ingrese el ID del préstamo que desea pagar: ";
-                cin>>idPrestamoPagar;
+                std::cout<<"Ingrese el ID del préstamo que desea pagar: ";
+                std::cin>>idPrestamoPagar;
                 if (std::cin.fail()){
                     throw std::runtime_error("No es un dato válido para el ID");
                 }
@@ -366,14 +412,14 @@ void Prestamos::procesarOpcionPrestamos()
                 /// Maneja el error lanzado
                 std::cerr << "Error: " << e.what() << std::endl;
             }
-            cout << "\n-- Tipo de pago --" << endl;
-            cout << "1.Pagar cuota\n2.Abonar al capital" << endl;
+            std::cout << "\n-- Tipo de pago --" << endl;
+            std::cout << "1.Pagar cuota\n2.Abonar al capital" << endl;
             opcion = MenusInfoCliente::verificarEntrada(2);
             if (opcion == 1){
                 pagarCuota(idPrestamoPagar);
             }
             else{
-
+                abonarCapital(idPrestamoPagar);
             }
             break;
 
