@@ -49,8 +49,7 @@ class CuentasAhorros{
         void actualizarDatos();
         // Se encarga de elegir la cuenta con la que el usuario decide realizar un trámite
         void elegirCuenta();
-    
-    private:
+        
         /**
          * Atributos importantes para el cliente que realiza el trámite
          * Entre ellos encontramos el id del usuario, la cantidad de dinero que posee en la cuenta elegida,
@@ -61,6 +60,9 @@ class CuentasAhorros{
         double dinero_cuenta;
         int tipo_moneda;
         int cantidad_cuentas = 0;
+        
+    private:
+        
         /**
          * Mismos atributos pero utilizados para el usuario al que se le transfiere dinero
          * 
