@@ -5,6 +5,11 @@ CuentasAhorros::CuentasAhorros(long long int cedula) : cedula_cliente(cedula) {}
 bool CuentasAhorros::crearCuenta(){
     try{
         int tipo;
+        
+        if (cantidad_cuentas == 2){
+            std::cout << "Usted ya posee 2 cuentas" << std::endl;
+            return false;
+        }
 
         std::cout << "---Creando su cuenta de ahorros---" << std::endl;
         std::cout << std::endl;
@@ -127,6 +132,7 @@ void CuentasAhorros::menuAccionesCuenta(){
 
     switch (opcion){
     case 1:
+        verficarCantidadCuentas();
         verificar = crearCuenta();
         if (verificar == true){
             std::cout << "Cuenta de ahorros creada" << std::endl;
@@ -166,7 +172,7 @@ void CuentasAhorros::menuAccionesCuenta(){
         elegirCuenta();
         verificar = tranferirDineroPropia();
         if (verificar == true){
-            std::cout << "Transferencia completada" << std::endl;
+            std::cout << "Transferencia completa" << std::endl;
             actualizarDatos();
         }
         break;
@@ -179,7 +185,10 @@ void CuentasAhorros::menuAccionesCuenta(){
             cedula_cliente_otro = cuenta_otro;
             verficarCantidadCuentas();
             elegirCuenta();
-            tranferirDineroOtro();
+            verificar = tranferirDineroOtro();
+            if (verificar == true){
+                std::cout << "Transferencia completa" << std::endl;
+            }
         }else{
             std::cout << "Tranferencia a otro usuario no realizada" << std::endl;
         }
