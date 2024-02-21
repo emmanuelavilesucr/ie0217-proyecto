@@ -153,7 +153,7 @@ void CuentasAhorros::menuAccionesCuenta(){
     case 4:
         verficarCantidadCuentas();
         elegirCuenta();
-        verificar = retiro();
+        verificar = retiro(0);
         if (verificar == true){
             std::cout << "Retiro completado" << std::endl;
             actualizarDatos();
@@ -380,26 +380,32 @@ bool CuentasAhorros::deposito(){
     return true;
 }
 
-bool CuentasAhorros::retiro(){
-    double dinero_retirado;
-    
-    std::cout << "Ingrese la cantidad de dinero a retirar a su cuenta: ";
-    std::cin >> dinero_retirado;
+bool CuentasAhorros::retiro(double retirar){
+    if (retirar == 0){    
+        double dinero_retirado;
+        
+        std::cout << "Ingrese la cantidad de dinero a retirar a su cuenta: ";
+        std::cin >> dinero_retirado;
 
-    if (std::cin.fail() || dinero_retirado < 0){
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "Ha elegido una cantidad de dinero erronea a retirar" << std::endl;
-        std::cout << std::endl;
-        return false;
-    }else if (dinero_retirado > dinero_cuenta){
-        std::cout << "Su cuenta posee menos dinero del que pide retirar" << std::endl;
-        std::cout << std::endl;
-        return false;
+        if (std::cin.fail() || dinero_retirado < 0){
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Ha elegido una cantidad de dinero erronea a retirar" << std::endl;
+            std::cout << std::endl;
+            return false;
+        }else if (dinero_retirado > dinero_cuenta){
+            std::cout << "Su cuenta posee menos dinero del que pide retirar" << std::endl;
+            std::cout << std::endl;
+            return false;
+        }
+        dinero_cuenta = dinero_cuenta - dinero_retirado;
+        return true;
+    }else{
+       dinero_cuenta = dinero_cuenta - retirar;
+        return true; 
     }
 
-    dinero_cuenta = dinero_cuenta - dinero_retirado;
-    return true;
+    
 }
 
 void CuentasAhorros::actualizarDatos(){
