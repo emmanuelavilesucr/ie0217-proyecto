@@ -24,17 +24,17 @@ void Prestamos::menuPrincipal()
     std::cout << " 3.Prestamo Hipotecario\n";
 }
 
-bool Prestamos::procesarOpciontercearia(){
+int Prestamos::procesarOpciontercearia(){
     cout << "\n--Tipos de moneda--\n1.Colones\n2.Dolares\n";
     int opcion2 = verificarEntrada(2);
     //if (opcion2 == 0){
      //   return;
     //}
     if (opcion2 == 1){
-            return true;
+            return 1;
     }
     else{
-        return false;
+        return 2;
     }
 
 }
@@ -58,7 +58,7 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
         return;
     }
     double monto;
-    bool moneda;
+    int moneda;
     /// Maneja las opciones dle menú 2, llama las funciones necesarias.
     switch (opcion1){
         case 1:
@@ -168,7 +168,7 @@ void Prestamos::procesarOpcion1()
 }
 
 
-void Prestamos::EscribirPrestamo(std::string tipo, std::string plazo, double interes, int cuotas, double monto, bool moneda){
+void Prestamos::EscribirPrestamo(std::string tipo, std::string plazo, double interes, int cuotas, double monto, int moneda){
 
    // std::cout << "ID del Cliente: " << cliente_id << ", Nombre: " << nombre << std::endl;
     std::ofstream archivo("prestamos.txt", std::ios::app);
@@ -241,6 +241,7 @@ bool Prestamos::obtenerPagos(long long int idPrestamo, double pagar){
             cuotaMensual = (tasaInteresMensual * std::stod(partes[3])) / (1 - pow((1 + tasaInteresMensual), -std::stod(partes[6])));
             interesPendiente = std::stod(partes[4]) * tasaInteresMensual;
             amortizacionPrincipal = cuotaMensual - interesPendiente;
+            tipoMoneda = std::stoi(partes[8]);
 
             if (pagar == 0){
                 saldoRestante = std::stod(partes[4]) - amortizacionPrincipal;
@@ -359,6 +360,9 @@ void Prestamos::pagarCuota(long long int idPrestamo)
                     // Hacer retiro con cuotamensual
                     cuenta.verficarCantidadCuentas();
                     cuenta.elegirCuenta();
+                    if (tipoMoneda != cuenta.tipo_moneda){
+                        cuotaMensual = conversionMoneda(cuotaMensual, tipoMoneda);
+                    }
                     verificar = cuenta.retiro(cuotaMensual);
                     if (verificar == true){
                         cuenta.actualizarDatos();
@@ -371,6 +375,9 @@ void Prestamos::pagarCuota(long long int idPrestamo)
                     cuotaMensual = cuotaMensual + saldoRestante;
                     cuenta.verficarCantidadCuentas();
                     cuenta.elegirCuenta();
+                    if (tipoMoneda != cuenta.tipo_moneda){
+                        cuotaMensual = conversionMoneda(cuotaMensual, tipoMoneda);
+                    }
                     verificar = cuenta.retiro(cuotaMensual);
                     if (verificar == true){
                         cuenta.actualizarDatos();
@@ -416,6 +423,9 @@ void Prestamos::abonarCapital(long long int idPrestamo)
                     //CuentasAhorros cuenta(id);
                     cuenta.verficarCantidadCuentas();
                     cuenta.elegirCuenta();
+                    if (tipoMoneda != cuenta.tipo_moneda){
+                        abono = conversionMoneda(abono, tipoMoneda);
+                    }
                     verificar = cuenta.retiro(abono);
                     if (verificar == true){
                         cuenta.actualizarDatos();
@@ -429,6 +439,9 @@ void Prestamos::abonarCapital(long long int idPrestamo)
                     cuenta.verficarCantidadCuentas();
                     cuenta.elegirCuenta();
                     abono = abono + saldoRestante;
+                    if (tipoMoneda != cuenta.tipo_moneda){
+                        abono = conversionMoneda(abono, tipoMoneda);
+                    }
                     verificar = cuenta.retiro(abono);
                     if (verificar == true){
                         cuenta.actualizarDatos();

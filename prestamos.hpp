@@ -9,7 +9,8 @@
 #include <iomanip>
 #include "menusinfoCliente.hpp"
 #include "cuentasAhorros.hpp"
-using namespace std;
+#include "funciones.hpp"
+//using namespace std;
 
 class Prestamos: public MenusInfoCliente {
     public:
@@ -19,11 +20,11 @@ class Prestamos: public MenusInfoCliente {
         int generarNuevoID();
         void procesarOpcion1();
         void menuPrincipal();
-        void EscribirPrestamo(std::string tipo, std::string plazo, double interes, int cuotas, double monto, bool moneda);
+        void EscribirPrestamo(std::string tipo, std::string plazo, double interes, int cuotas, double monto, int moneda);
         void nuevoPrestamo();
         bool verificarCuenta();
         void procesarOpcionSecun(Datos prestamo);
-        bool procesarOpciontercearia();
+        int procesarOpciontercearia();
         void prestamosAsociados();
         void pagarCuota(long long int idPrestamo);
         void abonarCapital(long long int idPrestamo);
@@ -44,6 +45,7 @@ class Prestamos: public MenusInfoCliente {
         double amortizacionPrincipal;
         double saldoRestante;
         double cuotasPagadas;
+        int tipoMoneda;
         //int cuotas;
 };
 #endif
