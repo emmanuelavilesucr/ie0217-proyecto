@@ -8,6 +8,7 @@
 #include <cmath>
 #include <iomanip>
 #include "menusinfoCliente.hpp"
+#include "cuentasAhorros.hpp"
 using namespace std;
 
 class Prestamos: public MenusInfoCliente {

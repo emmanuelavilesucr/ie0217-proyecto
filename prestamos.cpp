@@ -1,4 +1,5 @@
 #include "prestamos.hpp"
+#include "cuentasAhorros.hpp"
 #include <fstream>
 
 Prestamos:: Prestamos(long long int id){
@@ -336,9 +337,11 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
 
 void Prestamos::pagarCuota(long long int idPrestamo)
 {
+    CuentasAhorros cuenta(id);
     cout << "\n-- Eliga el método de pago --" << endl;
     cout << "1.Efectivo\n2.Transferencia" << endl;
     int opcion = MenusInfoCliente::verificarEntrada(2);
+    bool verificar;
     switch (opcion)
     {
         case 1:
@@ -351,19 +354,48 @@ void Prestamos::pagarCuota(long long int idPrestamo)
             break;
 
         default:
-            obtenerPagos(idPrestamo, 0);
+            if (obtenerPagos(idPrestamo, 0)){
+                if (saldoRestante > 0){
+                    // Hacer retiro con cuotamensual
+                    cuenta.verficarCantidadCuentas();
+                    cuenta.elegirCuenta();
+                    verificar = cuenta.retiro(cuotaMensual);
+                    if (verificar == true){
+                        cuenta.actualizarDatos();
+                        std::cout << "Retiro completado" << std::endl;
+                        actualizarDatos(idPrestamo, 0);
+                    }
+                }
+                else{
+                    // Hacer el retiro co
+                    cuotaMensual = cuotaMensual + saldoRestante;
+                    cuenta.verficarCantidadCuentas();
+                    cuenta.elegirCuenta();
+                    verificar = cuenta.retiro(cuotaMensual);
+                    if (verificar == true){
+                        cuenta.actualizarDatos();
+                        std::cout << "Retiro completado" << std::endl;
+                        actualizarDatos(idPrestamo, 0);
+                    }
+                }
+            }
+            else{
+                cout << "El préstamo ya fue cancelado";
+            }
+
             // Restarle al archivo de cuentas la cuota mensual
-            cout << "Opción 2";
             break;
     }
 }
 
 void Prestamos::abonarCapital(long long int idPrestamo)
 {
+    CuentasAhorros cuenta(id);
     cout << "\n-- Eliga el método de pago --" << endl;
     cout << "1.Efectivo\n2.Transferencia" << endl;
     int opcion = MenusInfoCliente::verificarEntrada(2);
     double abono;
+    bool verificar;
     cout << "\nDigite el monto que desea abonarle al capital: ";
     cin >> abono;
     switch (opcion)
@@ -379,7 +411,31 @@ void Prestamos::abonarCapital(long long int idPrestamo)
 
         default:
             if (obtenerPagos(idPrestamo, abono)){
-                actualizarDatos(idPrestamo, 1);
+                if (saldoRestante > 0){
+                    // Llamar retiro con abono
+                    //CuentasAhorros cuenta(id);
+                    cuenta.verficarCantidadCuentas();
+                    cuenta.elegirCuenta();
+                    verificar = cuenta.retiro(abono);
+                    if (verificar == true){
+                        cuenta.actualizarDatos();
+                        std::cout << "Retiro completado" << std::endl;
+                        actualizarDatos(idPrestamo, 1);
+                    }
+                }
+                else{
+                    // Llamar retiro con abono + saldo restante
+                    //CuentasAhorros cuenta(id);
+                    cuenta.verficarCantidadCuentas();
+                    cuenta.elegirCuenta();
+                    abono = abono + saldoRestante;
+                    verificar = cuenta.retiro(abono);
+                    if (verificar == true){
+                        cuenta.actualizarDatos();
+                        std::cout << "Retiro completado" << std::endl;
+                        actualizarDatos(idPrestamo, 1);
+                    }
+                }
             }
             else{
                 cout << "El préstamo ya fue cancelado";
