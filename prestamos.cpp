@@ -645,11 +645,3 @@ void Prestamos::procesarOpcionPrestamos()
 
     }
 }
-
-
-int main(){
-    Prestamos prestamo(123456789);
-    prestamo.menuPrestamos();
-    prestamo.procesarOpcionPrestamos();
-    return 0;
-}

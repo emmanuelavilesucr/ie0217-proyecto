@@ -6,6 +6,7 @@
 #include <regex>
 #include <fstream>
 #include <limits>
+#include "prestamos.hpp"
 
 /**
  * Clase encargada de las acciones de la interfaz
