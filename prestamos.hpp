@@ -25,7 +25,8 @@ class Prestamos: public MenusInfoCliente {
         bool procesarOpciontercearia();
         void prestamosAsociados();
         void pagarCuota(long long int idPrestamo);
-        void obtenerPagos(long long int idPrestamo);
+        void abonarCapital(long long int idPrestamo);
+        bool obtenerPagos(long long int idPrestamo, double pagar);
         void actualizarDatos(long long int idPrestamo, int opc);
 
     protected:

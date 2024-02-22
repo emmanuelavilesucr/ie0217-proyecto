@@ -224,7 +224,7 @@ void Prestamos::prestamosAsociados()
     archivo.close();
 }
 
-void Prestamos::obtenerPagos(long long int idPrestamo){
+bool Prestamos::obtenerPagos(long long int idPrestamo, double pagar){
     std::ifstream archivo_entrada("prestamos.txt");
     std::string linea;
     while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
@@ -240,8 +240,21 @@ void Prestamos::obtenerPagos(long long int idPrestamo){
             cuotaMensual = (tasaInteresMensual * std::stod(partes[3])) / (1 - pow((1 + tasaInteresMensual), -std::stod(partes[6])));
             interesPendiente = std::stod(partes[4]) * tasaInteresMensual;
             amortizacionPrincipal = cuotaMensual - interesPendiente;
-            saldoRestante = std::stod(partes[4]) - amortizacionPrincipal;
-            cuotasPagadas = std::stoi(partes[7]) + 1;
+
+            if (pagar == 0){
+                saldoRestante = std::stod(partes[4]) - amortizacionPrincipal;
+                cuotasPagadas = std::stoi(partes[7]) + 1;
+            }
+            else{
+                saldoRestante = std::stod(partes[4]) - pagar;
+            }
+
+            if (std::stod(partes[4]) > 0){
+                return true;
+            }
+            else{
+                return false;
+            }
             // Saldorestante =  Saldorestante -amortizacionPrincipal
             // cuotas pagadas +1
         }
@@ -276,9 +289,17 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
                 while (std::getline(ss, parte, ',')) {
                     partes.push_back(parte);
                 }
-                partes[4] = std::to_string(saldoRestante);
-                if (opc == 1){
-                        partes[7] = std::to_string(cuotasPagadas);
+
+                if (saldoRestante > 0){
+                    partes[4] = std::to_string(saldoRestante);
+                }
+                else{
+                    partes[4] = "0";
+                }
+
+
+                if (opc == 0){
+                    partes[7] = std::to_string(cuotasPagadas);
                 }
                 cambio = true;
                 archivo_escritura << id << "," << partes[1] << "," << partes[2] << "," << std::fixed << std::setprecision(15) << partes[3] << ","
@@ -321,18 +342,51 @@ void Prestamos::pagarCuota(long long int idPrestamo)
     switch (opcion)
     {
         case 1:
-            obtenerPagos(idPrestamo);
-            actualizarDatos(idPrestamo, 1);
+            if (obtenerPagos(idPrestamo, 0)){
+                actualizarDatos(idPrestamo, 0);
+            }
+            else{
+                cout << "El préstamo ya fue cancelado";
+            }
             break;
 
         default:
-            obtenerPagos(idPrestamo);
+            obtenerPagos(idPrestamo, 0);
             // Restarle al archivo de cuentas la cuota mensual
             cout << "Opción 2";
             break;
     }
 }
 
+void Prestamos::abonarCapital(long long int idPrestamo)
+{
+    cout << "\n-- Eliga el método de pago --" << endl;
+    cout << "1.Efectivo\n2.Transferencia" << endl;
+    int opcion = MenusInfoCliente::verificarEntrada(2);
+    double abono;
+    cout << "\nDigite el monto que desea abonarle al capital: ";
+    cin >> abono;
+    switch (opcion)
+    {
+        case 1:
+            if (obtenerPagos(idPrestamo, abono)){
+                actualizarDatos(idPrestamo, 1);
+            }
+            else{
+                cout << "El préstamo ya fue cancelado";
+            }
+            break;
+
+        default:
+            if (obtenerPagos(idPrestamo, abono)){
+                actualizarDatos(idPrestamo, 1);
+            }
+            else{
+                cout << "El préstamo ya fue cancelado";
+            }
+            break;
+    }
+}
 
 void Prestamos::procesarOpcionPrestamos()
 {
@@ -373,7 +427,7 @@ void Prestamos::procesarOpcionPrestamos()
                 pagarCuota(idPrestamoPagar);
             }
             else{
-
+                abonarCapital(idPrestamoPagar);
             }
             break;
 
