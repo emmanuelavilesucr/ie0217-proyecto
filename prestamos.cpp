@@ -1,5 +1,4 @@
 #include "prestamos.hpp"
-#include "cuentasAhorros.hpp"
 #include <fstream>
 
 Prestamos:: Prestamos(long long int id){
@@ -27,9 +26,6 @@ void Prestamos::menuPrincipal()
 int Prestamos::procesarOpciontercearia(){
     cout << "\n--Tipos de moneda--\n1.Colones\n2.Dolares\n";
     int opcion2 = verificarEntrada(2);
-    //if (opcion2 == 0){
-     //   return;
-    //}
     if (opcion2 == 1){
             return 1;
     }
@@ -174,13 +170,104 @@ void Prestamos::EscribirPrestamo(std::string tipo, std::string plazo, double int
     std::ofstream archivo("prestamos.txt", std::ios::app);
     if (archivo.is_open()) {
         archivo << idPrestamo << ","<< id << "," << tipo << "," << std::fixed << std::setprecision(15) << monto << "," << std::fixed << std::setprecision(15) << monto << "," << interes << "," << cuotas << "," << "0" <<  "," << moneda << std::endl;  // Escribe los datos del cliente en archivo txt
+        cout << "\nEl nuevo préstamo se ha registrado" << endl;
         archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
     }
 }
 
+void Prestamos::generarReporte(std::string nombre){
+    int cuotaActual = 0;
+    ofstream archivo; // Objeto de flujo de salida para escribir en el archivo.
+    archivo.open(nombre, ios::app); // Abre el archivo.
+    if (archivo.fail()){
+        // Muestra un mensaje de error si falla.
+        cout << "No se pudo abrir el archivo"<< endl;
+        exit(1);
+    }
+    // Primera linea del reporte.
+    archivo << "Cuota  Interés pendiente  Amortización  Saldo restante"<< endl;
+    for (int i = 0; i < amortizacion.size(); i++){ // Itera sobre cada elemento de la tabla de amortización.
+        if (cuotaActual > cuotasPagadas || amortizacion[i][3] < 0){
+            break;
+        }
+        // Escribe los datos de cada cuota en el archivo.
+        archivo << amortizacion[i][0] << "   " << amortizacion[i][1] << "   "<< amortizacion[i][2] << "   "<< amortizacion[i][3] << "   "<< endl;
+        cuotaActual = cuotaActual + 1;
+    }
+    cout << "\n¡El reporte se ha generado con éxito!" << endl;
+    archivo.close(); // Cierra el archivo
 
+}
+
+void Prestamos::menuReporte()
+{
+    cout << "1. Generar reporte actual de un préstamo" << endl;
+    cout << "2. Salir" << endl;
+    int opcion = MenusInfoCliente::verificarEntrada(2);
+    if (opcion == 1){
+        if (revisarIdPrestamo()){
+            std::ifstream archivo_entrada("prestamos.txt");
+            std::string linea;
+            while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
+                if (id == idPrestamoTemp) {
+                    std::stringstream ss(linea);
+                    std::string parte;
+                    std::vector<std::string> partes;
+
+                    while (std::getline(ss, parte, ',')) {
+                        partes.push_back(parte);
+                    }
+                    InfoCliente informacion(std::stod(partes[3]), std::stod(partes[5]), std::stoi(partes[6]), std::stod(partes[4]));
+                    amortizacion = informacion.amortizacion;
+                    cuotasPagadas = std::stoi(partes[7]);
+                    generarReporte("ReporteActual" + std::to_string(idPrestamoTemp) + ".txt");
+
+                }
+            }
+        }
+        else{
+            cout << "No se pudo encontrar un préstamo relacionado";
+        }
+
+    }
+
+}
+
+bool Prestamos::revisarIdPrestamo(){
+    try
+    {
+        cout<<"Ingrese el ID del préstamo que desea pagar: ";
+        cin>>idPrestamoTemp;
+        if (std::cin.fail()){
+            throw std::runtime_error("No es un dato válido para el ID");
+        }
+        bool encontrado = false;
+        std::ifstream archivo_entrada("prestamos.txt");
+        std::string linea;
+        while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
+            if (id == idPrestamoTemp) {
+                return true;
+                cout << "Hola wfff";
+            }
+        }
+        /*
+         if (encontrado == true){
+            return true;
+        }
+        else{
+            return false;
+        }
+        */
+    }
+    catch(const std::exception& e){
+        /// Maneja el error lanzado
+        std::cerr << "Error: " << e.what() << std::endl;
+        exit(0);
+    }
+
+}
 void Prestamos::prestamosAsociados()
 {
     // Abre el archivo para leer
@@ -193,7 +280,7 @@ void Prestamos::prestamosAsociados()
         std::stringstream ss(linea);
         std::string parte;
         int contador = 0;
-        std::string moneda;
+        std::string monedad;
 
         // Recorre cada parte de la línea
         while (std::getline(ss, parte, ',')) {
@@ -210,19 +297,19 @@ void Prestamos::prestamosAsociados()
                         partes.push_back(parte);
                     }
                     if (partes[8] == "1"){
-                        moneda == "Colones";
+                        monedad == "Colones";
                     }
                     else{
-                        moneda == "Dolares";
+                        monedad == "Dolares";
                     }
-                    cout << partes[0] << "\t" << partes[2]<< "\t" << partes[3]<< "\t" << partes[4]<< "\t" << partes[5]<< "\t\t" << partes[6]<< "\t" << partes[7]<< "\t" << moneda << std::endl;
+                    cout << partes[0] << "\t" << partes[2]<< "\t" << std::stof(partes[3])<< "\t" << std::stof(partes[4])<< "\t" << std::stof(partes[5])<< "\t\t" << partes[6]<< "\t" << std::stof(partes[7])<< "\t" << monedad << std::endl;
                 }
             }
         }
     }
-
     // Cierra el archivo
     archivo.close();
+    menuReporte();
 }
 
 bool Prestamos::obtenerPagos(long long int idPrestamo, double pagar){
@@ -324,6 +411,7 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
         archivo_escritura.close();
 
         if (cambio) {
+            cout << "\n¡Se realizó el pago correctamente!"<< endl;
             remove("prestamos.txt");
             rename("prestamos_temp.txt", "prestamos.txt");
         } else {
@@ -469,7 +557,7 @@ void Prestamos::procesarOpcionPrestamos()
     {
         case 1:
             cout << "\nPréstamos asociados a la cuenta " << id << endl;
-            cout << "Id\tTipo\t\tMonto\tSaldo\tIntéres\tCuotas\tCuotas pagadas" << endl;
+            cout << "Id\tTipo\t\tMonto\tSaldo\tIntéres\tCuotas\tCuotas pagadas\tMoneda" << endl;
             prestamosAsociados();
             break;
 
@@ -478,25 +566,33 @@ void Prestamos::procesarOpcionPrestamos()
             procesarOpcion1();
             break;
         default:
-            try{
-                cout<<"Ingrese el ID del préstamo que desea pagar: ";
-                cin>>idPrestamoPagar;
-                if (std::cin.fail()){
-                    throw std::runtime_error("No es un dato válido para el ID");
+            if(revisarIdPrestamo())
+            {
+                /*
+                try{
+                    cout<<"Ingrese el ID del préstamo que desea pagar: ";
+                    cin>>idPrestamoPagar;
+                    if (std::cin.fail()){
+                        throw std::runtime_error("No es un dato válido para el ID");
+                    }
+                }
+                catch(const std::exception& e){
+                    /// Maneja el error lanzado
+                    std::cerr << "Error: " << e.what() << std::endl;
+                }
+                */
+                cout << "\n-- Tipo de pago --" << endl;
+                cout << "1.Pagar cuota\n2.Abonar al capital" << endl;
+                opcion = MenusInfoCliente::verificarEntrada(2);
+                if (opcion == 1){
+                    pagarCuota(idPrestamoTemp);
+                }
+                else{
+                    abonarCapital(idPrestamoTemp);
                 }
             }
-            catch(const std::exception& e){
-                /// Maneja el error lanzado
-                std::cerr << "Error: " << e.what() << std::endl;
-            }
-            cout << "\n-- Tipo de pago --" << endl;
-            cout << "1.Pagar cuota\n2.Abonar al capital" << endl;
-            opcion = MenusInfoCliente::verificarEntrada(2);
-            if (opcion == 1){
-                pagarCuota(idPrestamoPagar);
-            }
             else{
-                abonarCapital(idPrestamoPagar);
+                cout << "No se pudo encontrar un préstamo relacionado";
             }
             break;
 

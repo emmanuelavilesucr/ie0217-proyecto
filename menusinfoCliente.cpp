@@ -94,7 +94,7 @@ void MenusInfoCliente::procesarOpcion3(std::string tipo, std::string plazo, doub
                 if (std::cin.fail()){
                     throw std::runtime_error("No es un dato válido para el monto");
                 }
-                InfoCliente informacion(montoPrestamo, interes, cuotas);
+                InfoCliente informacion(montoPrestamo, interes, cuotas, 1);
                 informacion.generarReporte("Reporte" + tipo + plazo +".txt");
             }
             catch(const std::exception& e){
@@ -204,7 +204,7 @@ void MenusInfoCliente::procesarOpcion1()
                     throw std::runtime_error("Ha ingresado los datos de manera incorrecta.");
                 }
 
-                InfoCliente informacion(montoPrestamo, interes, cuotas);
+                InfoCliente informacion(montoPrestamo, interes, cuotas, 1);
                 informacion.generarReporte("ReportePersonalizado.txt");
                 break;
 

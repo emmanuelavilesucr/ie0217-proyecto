@@ -45,14 +45,14 @@ class InfoCliente {
          * @param tasaInteresAnual Valor de la tasa de interés anual del préstamo.
          * @param cuotas Número de cuotas del préstamo.
          */
-        InfoCliente(double montoPrestamo, double tasaInteresAnual, int cuotas);
+        InfoCliente(double montoPrestamo, double tasaInteresAnual, int cuotas, double tipo);
 
         /**
          * @brief Calcula la amortización del préstamo.
          * 
          * @return Lista de amortizaciones para cada cuota.
          */
-        std::vector<std::vector<double>> calcularAmortizacion();
+        std::vector<std::vector<double>> calcularAmortizacion(double tipo);
 
         /**
          * @brief Método para imprimir el reporte en un archivo csv.
@@ -61,11 +61,13 @@ class InfoCliente {
          */
         void generarReporte(std::string nombre);
 
+        std::vector<std::vector<double>> amortizacion; ///< Lista de amortizaciones para cada cuota.
+
     protected:
         double montoPrestamo; ///< Valor del monto del préstamo.
         double tasaInteresAnual; ///< Valor de la tasa de interés anual del préstamo.
         int numCuotas; ///< Número de cuotas del préstamo.
-        std::vector<std::vector<double>> amortizacion; ///< Lista de amortizaciones para cada cuota.
+        int tipo;
 };
 
 #endif /* INFORMACION_HPP */

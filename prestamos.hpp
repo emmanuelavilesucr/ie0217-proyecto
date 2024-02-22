@@ -10,6 +10,7 @@
 #include "menusinfoCliente.hpp"
 #include "cuentasAhorros.hpp"
 #include "funciones.hpp"
+#include "infoCliente.hpp"
 //using namespace std;
 
 class Prestamos: public MenusInfoCliente {
@@ -26,6 +27,9 @@ class Prestamos: public MenusInfoCliente {
         void procesarOpcionSecun(Datos prestamo);
         int procesarOpciontercearia();
         void prestamosAsociados();
+        void generarReporte(std::string nombre);
+        void menuReporte();
+        bool revisarIdPrestamo();
         void pagarCuota(long long int idPrestamo);
         void abonarCapital(long long int idPrestamo);
         bool obtenerPagos(long long int idPrestamo, double pagar);
@@ -46,6 +50,8 @@ class Prestamos: public MenusInfoCliente {
         double saldoRestante;
         double cuotasPagadas;
         int tipoMoneda;
+        long long int idPrestamoTemp;
+        std::vector<std::vector<double>> amortizacion;
         //int cuotas;
 };
 #endif
