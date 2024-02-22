@@ -1,5 +1,6 @@
 #ifndef CDP_HPP
 #define CDP_HPP
+
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
@@ -8,6 +9,9 @@
 #include <sstream>
 #include <iomanip>
 #include <cmath>
+#include <unordered_map> // Nueva inclusión de biblioteca
+
+using namespace std; // No recomendado en archivos de cabecera, pero lo mantendremos por simplicidad
 
 /**
  * @file cdp.hpp
@@ -30,6 +34,10 @@
  * 
 */
 
+struct Cuenta {
+    double colones;
+    double dolares;
+};
 
 class CDP {
 
@@ -38,8 +46,11 @@ class CDP {
         void menuPrincipal();       // Muestra el menu principal 
         void menuSecundario();     // Muestra el menu secundario
         void menuPlazos();        // Muestra el menu con los plazos displonibles al usuario. 
-        void monto();            // ingresa los montos del CDPs.
-    
+        void monto();            // ingresa los montos del CDPs
+        void menuDivisas();
+        void menuTransferenciasPlazos();
+        void menuTranferenciaDivisas();  
+
     private:
 
         /**
@@ -50,12 +61,17 @@ class CDP {
         double interes;
         double montoCDP;
         double plazo;
-        std::string tipo;
+        string tipo;
 
+        // Nuevas adiciones para manipulación de cuentas bancarias
+        unordered_map<string, Cuenta> cuentas; // Estructura para almacenar cuentas bancarias
       
         void ingresarCDP();    // Ingresa nuevos CDPs
         void mostrarCDPs();   // Muestra los CDPs existentes a cada usuario.
-     
+
+        // Nuevas funciones para manipulación de cuentas bancarias
+        void restarDinero(const string& numeroCuenta, double cantidad, int tipoMoneda, unordered_map<string, Cuenta>& cuentas);
+        void elegirCuenta();
 };
 
 #endif

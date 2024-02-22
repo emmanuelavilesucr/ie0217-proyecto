@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <iomanip> 
 #include <vector>
+#include "cuentasAhorros.hpp"
+
 
 /**
  * @file cdp.cpp
@@ -27,8 +29,7 @@
  * 
 */
 
-
-CDP::CDP(long long int cedula) : cedula_cliente(cedula) {} // Constructo de la clase CDP
+CDP::CDP(long long int cedula) : cedula_cliente(cedula) {} // Constructor de la clase CDP
 
 /**
  * @brief Ingresar nuevos certificados de depositos.
@@ -48,6 +49,7 @@ void CDP::ingresarCDP(){
  * Permite al usuario realizar operaciones respecto a los CDPs.
  */
 void CDP::menuPrincipal(){
+
     int opcion;
     std::cout << "\n --- Certificados de Depósitos ---\n";
     std::cout << "1. Crear CDP\n";
@@ -76,9 +78,231 @@ void CDP::menuPrincipal(){
 }
 
 /**
+ * @brief Muestra el menu que incluye los metodos de pago.
+ */
+void CDP::menuSecundario(){
+    int opcion_secundaria;
+    std::cout << "\n --- Metodo de pago: ---\n";
+    std::cout << "1. Efectivo\n";
+    std::cout << "2. Transferencia\n";
+    std::cout << "Ingrese una opción:\n";
+    try {
+        std::cin >> opcion_secundaria;
+        switch (opcion_secundaria) {
+            case 1:
+                menuDivisas(); 
+                break;
+            case 2:
+                menuTransferenciasPlazos();
+                break;
+            default:
+                throw std::runtime_error("La opción elegida no está disponible.");
+        }
+    } catch (std::exception& e) {
+        std::cerr << "Error detectado: " << e.what() << std::endl;
+    }
+}
+
+/**
+ * @brief Muestra el menu de los plazos de CDPs en caso de haber escogido la opcion de transferencia en el menu secundario.
+ */
+void CDP::menuTransferenciasPlazos(){
+    int opcion_transPlazo;
+    std::cout << "\n --- Plazos: ---\n";
+    std::cout << "1. Tres meses a 3% \n";
+    std::cout << "2. Seis meses a 4% \n";
+    std::cout << "3. Doce meses a 5% \n";
+    std::cout << "Ingrese una opción:\n";
+    try {
+        std::cin >> opcion_transPlazo;
+        switch (opcion_transPlazo) {
+            case 1:
+                plazo = 3;
+                interes = 3;
+                menuTranferenciaDivisas();
+                break;
+            case 2:
+                plazo = 6;
+                interes = 4;
+                menuTranferenciaDivisas(); 
+                break;
+            case 3:
+                plazo = 12;
+                interes = 5;
+                menuTranferenciaDivisas();
+                break;
+            default:
+                throw std::runtime_error("La opción elegida no está disponible.");
+        }
+    } catch (std::exception& e) {
+        std::cerr << "Error detectado: " << e.what() << std::endl;
+    }
+}
+
+/**
+ * @brief Muestra el menu para seleccionar la divisa en caso de haber escogido pago por transferencia.
+ */
+void CDP::menuTranferenciaDivisas() {   
+    int opcion_transDivisa;
+    std::cout << "\n --- Tipo de Divisa: ---\n";
+    std::cout << "1. Colones \n";
+    std::cout << "2. Dólares\n";
+    std::cout << "Ingrese una opción:\n";
+    try {
+        std::cin >> opcion_transDivisa;
+        switch (opcion_transDivisa) {
+            case 1:
+                tipo = "Colones"; 
+                elegirCuenta(); 
+                break;
+            case 2:
+                tipo = "Dolares"; 
+                elegirCuenta(); 
+                break;
+            default:
+                throw std::runtime_error("La opción elegida no está disponible.");
+        }
+    } catch (std::exception& e) {
+        std::cerr << "Error detectado: " << e.what() << std::endl;
+    }
+}
+
+/**
+ * @brief Realiza el cobro del CDP del saldo de la cuenta bancaria.
+ * 
+ * @param cantidad La cantidad a restar
+ * @param tipoMoneda El tipo de Divisa
+ */
+void CDP::restarDinero(const string& numeroCuenta, double cantidad, int tipoMoneda, unordered_map<string, Cuenta>& cuentas) {
+    ifstream archivoEntrada("cuentasAhorros.txt");
+    ofstream archivoSalida("cuentasAhorros.tmp");
+
+    if (!archivoEntrada.is_open() || !archivoSalida.is_open()) {
+        cout << "Error al abrir el archivo." << endl;
+        return;
+    }
+
+    string linea;
+    while (getline(archivoEntrada, linea)) {
+        stringstream ss(linea);
+        string cuenta, tipoMonedaStr, saldoStr;
+
+        if (getline(ss, cuenta, ',') && getline(ss, tipoMonedaStr, ',') && getline(ss, saldoStr, ',')) {
+            int tipoMonedaActual = stoi(tipoMonedaStr);
+            if (cuenta == numeroCuenta && tipoMonedaActual == tipoMoneda) {
+                double saldo = stod(saldoStr);
+                saldo -= cantidad;
+                archivoSalida << cuenta << "," << tipoMonedaActual << "," << fixed << setprecision(15) << saldo << "\n";
+                if (tipoMonedaActual == 1) {
+                    cuentas[numeroCuenta].colones = saldo;
+                } else {
+                    cuentas[numeroCuenta].dolares = saldo;
+                }
+            } else {
+                archivoSalida << linea << "\n";
+            }
+        } else {
+            cout << "Error al leer la línea del archivo: " << linea << endl;
+        }
+    }
+
+    archivoEntrada.close();
+    archivoSalida.close();
+
+    remove("cuentasAhorros.txt");
+    rename("cuentasAhorros.tmp", "cuentasAhorros.txt");
+    remove("cuentasAhorros.tmp");
+}
+
+/**
+ * @brief Solicita al usuario inicir sesion con la cuenta bancaria.
+ */
+void CDP::elegirCuenta() {
+    ifstream archivo("cuentasAhorros.txt");
+
+    if (!archivo.is_open()) {
+        cout << "Error al abrir el archivo." << endl;
+        return;
+    }
+
+    unordered_map<string, Cuenta> cuentas;
+
+    string linea;
+    while (getline(archivo, linea)) {
+        stringstream ss(linea);
+        
+        string numeroCuenta_str, tipoMoneda_str, saldo_str;
+
+        if (getline(ss, numeroCuenta_str, ',') && getline(ss, tipoMoneda_str, ',') && getline(ss, saldo_str, ',')) {
+            double saldo = stod(saldo_str);
+            int tipoMoneda = stoi(tipoMoneda_str);
+            
+            if (cuentas.find(numeroCuenta_str) == cuentas.end()) {
+                if (tipoMoneda == 1) {
+                    cuentas[numeroCuenta_str] = Cuenta{saldo, 0};
+                } else if (tipoMoneda == 2) {
+                    cuentas[numeroCuenta_str] = Cuenta{0, saldo};
+                }
+            } else {
+                if (tipoMoneda == 1) {
+                    cuentas[numeroCuenta_str].colones = saldo;
+                } else if (tipoMoneda == 2) {
+                    cuentas[numeroCuenta_str].dolares = saldo;
+                }
+            }
+        } else {
+            cout << "Error al leer la línea del archivo: " << linea << endl;
+        }
+    }
+
+    archivo.close();
+
+    cout << "Ingrese el ID de su cuenta bancaria: ";
+    string numeroCuentaUsuario;
+    cin >> numeroCuentaUsuario;
+
+    if (cuentas.find(numeroCuentaUsuario) != cuentas.end()) {
+        Cuenta& cuentaUsuario = cuentas[numeroCuentaUsuario];
+
+        cout << "--- Cuentas de ahorro activas: --- " << endl;
+        if (cuentaUsuario.colones > 0) {
+            cout << "1. Cuenta en colones" << endl;
+        }
+        if (cuentaUsuario.dolares > 0) {
+            cout << "2. Cuenta en dolares" << endl;
+        }
+
+        int tipoCuenta;
+        cout << "Elija la cuenta con la que desea adquirir el CDP: ";
+        cin >> tipoCuenta;
+
+        if ((tipoCuenta == 1 && cuentaUsuario.colones > 0) || (tipoCuenta == 2 && cuentaUsuario.dolares > 0)) {
+            cout << "Ingrese monto del CDP: ";
+            cin >> montoCDP;
+
+            if (montoCDP > 0) {
+                restarDinero(numeroCuentaUsuario, montoCDP, tipoCuenta, cuentas);
+                cout << "--- CDP registrado ---" << endl;
+                ingresarCDP();
+
+            } else {
+                cout << "La cantidad ingresada no es válida." << endl;
+            }
+        } else {
+            cout << "Opción invalida." << endl;
+        }
+        
+    } else {
+        cout << "El número de cuenta ingresado no existe." << endl;
+    }
+
+    return;
+}
+
+/**
  * @brief Muestra al usuario un menu con el tipo de divisas al crear un CDP.
  */
-void CDP::menuSecundario() {   
+void CDP::menuDivisas() {   
     int opcion_divisa;
     std::cout << "\n --- Tipo de Divisa: ---\n";
     std::cout << "1. Colones \n";
@@ -92,7 +316,7 @@ void CDP::menuSecundario() {
                 menuPlazos(); 
                 break;
             case 2:
-                tipo = "Dólares"; 
+                tipo = "Dolares"; 
                 menuPlazos(); 
                 break;
             default:
@@ -139,15 +363,13 @@ void CDP::menuPlazos() {
     }
 }
 
-
 /**
  * @brief El usuario ingresa el monto de los nuevos CDPs.
  */
 void CDP::monto() {
-    double monto;
     std::cout << "Ingrese el monto: ";
-    std::cin >> monto;
-    montoCDP = monto; 
+    std::cin >> montoCDP;
+    std::cout << "--- CDP registrado ---\n";
     ingresarCDP();  // Almacena los datos ingresados por el usuario en el archivo txt
 }
 
