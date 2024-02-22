@@ -40,12 +40,7 @@ private:
 
       bool crearCuentaVerificarRepetidos(long long int cedula);
 
-      // Posibles funciones futuras
-      void solicitarCuenta();
-
-      void solicitarPrestamo();
-
-      void informacion();
+      void accionesCliente(long long int cedula);
 
       
 public:

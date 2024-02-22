@@ -31,7 +31,6 @@ Clientes::Clientes(long long int id, const std::string& nombre) : cliente_id(id)
  */
 void Clientes::GuardarInformacion() const {
 
-    std::cout << "ID del Cliente: " << cliente_id << ", Nombre: " << nombre << std::endl;
     std::ofstream archivo("clientes.txt", std::ios::app);
     if (archivo.is_open()) {
         archivo << cliente_id << "," << nombre << std::endl;  // Escribe los datos del cliente en archivo txt

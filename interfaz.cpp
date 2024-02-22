@@ -1,5 +1,6 @@
 #include "interfaz.hpp"
 #include "menusInfoCliente.hpp"
+#include "cuentasAhorros.hpp"
 // #include "CuentasBancarias.hpp"
 // #include "Prestamos.hpp"
 /**
@@ -19,6 +20,42 @@
  * limitations under the License.
  * 
 */
+
+
+void Interfaz::accionesCliente(long long int cedula){
+    int opcion_accion_cliente;
+    CuentasAhorros cuenta(cedula);
+    
+    std::cout << "---Principales tipos de acciones---" << std::endl;
+    std::cout << "1. Cuentas de ahorros" << std::endl;
+    std::cout << "2. Prestamos" << std::endl;
+    std::cout << "3. CDP's" << std::endl;
+    std::cout << "4. Salir de las acciones de cliente" << std::endl;
+    std::cout << "Ingrese el número de una opción: ";
+
+    std::cin >> opcion_accion_cliente;
+        
+        switch (opcion_accion_cliente)
+        {
+        case 1:
+            cuenta.menuAccionesCuenta();
+            break;
+        case 2:
+            std::cout << "Opcion 2" << std::endl;
+            std:: cout << std::endl;
+            break;
+        case 3:
+            std::cout << "Opcion 3" << std::endl;
+            std:: cout << std::endl;
+            break;
+        case 4:
+            break;
+        default:
+            throw std::runtime_error("La opción elegida no esta disponible.");
+        }
+
+}
+
 /**
  * @brief Verificca que la cédula ingresada por el usuario, no pertezca a otro usuario
  * 
@@ -27,6 +64,7 @@
  * @return true 
  * @return false 
  */
+
 bool Interfaz::crearCuentaVerificarRepetidos(long long int cedula){
     
     std::ifstream archivo_entrada("clientes.txt");
@@ -66,6 +104,7 @@ void Interfaz::crearCuentaVerificarExpresiones(){
         std::cin.ignore();
 
         while(true){
+            std::cout << std::endl;
             std::cout << "Ingrese su nombre: ";
             getline(std::cin, nombre);
 
@@ -77,13 +116,23 @@ void Interfaz::crearCuentaVerificarExpresiones(){
 
             if (verificar_nombre == true && verificar_cedula == true){
                 long long int cedula = std::stoll(cedula_expresion);
-                bool verificado = crearCuentaVerificarRepetidos(cedula);
-                if  (verificado == true){
-
+                bool verificado1 = crearCuentaVerificarRepetidos(cedula);
+                if  (verificado1 == true){
+                    
+                    CuentasAhorros cuenta(cedula);
                     Clientes clientes(cedula, nombre);
-                    clientes.GuardarInformacion();
-                    std::cout << "Su cuenta ha sido creada" << std::endl;
-                    break;
+
+                    bool verificado2 = cuenta.crearCuenta();
+                    if (verificado2 == true){
+                        clientes.GuardarInformacion();
+                        std::cout << "Su cuenta ha sido creada" << std::endl;
+                        std::cout << std::endl;
+                        break;
+                    }else{
+                        std::cout << "Su cuenta no ha sido creada" << std::endl;
+                        std::cout << std::endl;
+                        break;
+                    }
                 }
 
             }else if (verificar_nombre == false && verificar_cedula == false) {
@@ -108,6 +157,8 @@ void Interfaz::crearCuentaVerificarExpresiones(){
             }
         }
         
+    }catch (std::exception& e){
+        std::cerr << "Error detectado: " << e.what() << std::endl;
     }catch (...){
         std::cout << "Error inesperado a la hora de crear la cuenta" << std::endl;
     }
@@ -155,7 +206,10 @@ bool Interfaz::verificarCuenta() {
             size_t pos = nombre_usuario.find(',');
             if (pos != std::string::npos) {
                 std::string nombre = nombre_usuario.substr(pos + 1);
-                std::cout << "La cédula ingresada pertenece a: " << nombre << std::endl;
+                std::cout << std::endl;
+                std::cout << "Bienvenido/a: " << nombre << std::endl;
+                std:: cout << std::endl;
+                accionesCliente(cedula);
             }
             return false;
         }
@@ -177,6 +231,7 @@ bool Interfaz::verificarCuenta() {
 void Interfaz::menuAtencionClientes(){
     int opcion_cliente;
     
+    std::cout << std::endl;
     std::cout << "---Opciones para la atención al cliente---" << std::endl;
     std::cout << "1. Acceder a una cuenta creada" << std::endl;
     std::cout << "2. Crear una cuenta" << std::endl;
@@ -188,7 +243,6 @@ void Interfaz::menuAtencionClientes(){
         switch (opcion_cliente)
         {
         case 1:
-            std::cout << "Se ha elegido la opcion 1" << std::endl;
             verificarCuenta();
             break;
         case 2:
@@ -209,6 +263,7 @@ void Interfaz::menuAtencionClientes(){
 void Interfaz::menuInicial(){
     int opcion;
 
+    std::cout << std::endl;
     std::cout << "---Bienvenido al servicio administrativo del banco---" << std::endl;
     std::cout << "1. Información al cliente" << std::endl;
     std::cout << "2. Atención al cliente" << std::endl;
