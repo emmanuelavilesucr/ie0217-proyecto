@@ -40,7 +40,7 @@ void Prestamos::menuPrestamos()
     std::cout << "\n --- Gestión de préstamos ---\n";
     std::cout << " 1.Ver préstamos asociados a esa cuenta\n";
     std::cout << " 2.Crear préstamo\n";
-    std::cout << " 3.Abonar a un préstamo\n";
+    std::cout << " 3.Pagar cuota a un préstamo\n";
 }
 
 /**
@@ -247,26 +247,46 @@ void Prestamos::EscribirPrestamo(std::string tipo, std::string plazo, double int
  * @param nombre El nombre del archivo en el que se escribirá el reporte.
  */
 void Prestamos::generarReporte(std::string nombre){
-    int cuotaActual = 0;
-    ofstream archivo; // Objeto de flujo de salida para escribir en el archivo.
-    archivo.open(nombre, ios::app); // Abre el archivo.
-    if (archivo.fail()){
-        // Muestra un mensaje de error si falla.
-        cout << "No se pudo abrir el archivo"<< endl;
-        exit(1);
-    }
-    // Primera linea del reporte.
-    archivo << "Cuota  Interés pendiente  Amortización  Saldo restante"<< endl;
-    for (int i = 0; i < amortizacion.size(); i++){ // Itera sobre cada elemento de la tabla de amortización.
-        if (cuotaActual > cuotasPagadas || amortizacion[i][3] < 0){
-            break;
+    if (cuotasPagadas != 0)
+    {
+        if (std::ifstream(nombre)) {
+            std::remove(nombre.c_str());
         }
-        // Escribe los datos de cada cuota en el archivo.
-        archivo << amortizacion[i][0] << "   " << amortizacion[i][1] << "   "<< amortizacion[i][2] << "   "<< amortizacion[i][3] << "   "<< endl;
-        cuotaActual = cuotaActual + 1;
+        if (std::ifstream(nombre)) {
+            if (std::remove(nombre.c_str()) != 0) {
+                
+            } else {
+                std::cout << "Se eliminó el archivo existente con el mismo nombre" << std::endl;
+            }
+        }
+        int cuotaActual = 0;
+        ofstream archivo; // Objeto de flujo de salida para escribir en el archivo.
+        archivo.open(nombre, ios::app); // Abre el archivo.
+        if (archivo.fail()){
+            // Muestra un mensaje de error si falla.
+            cout << "No se pudo abrir el archivo"<< endl;
+            exit(1);
+        }
+        
+        // Primera linea del reporte.
+        archivo << "Cuota\tInterés pendiente\tAmortización\tSaldo restante"<< endl;
+        for (int i = 0; i < amortizacion.size(); i++){ // Itera sobre cada elemento de la tabla de amortización.
+            if (cuotaActual >= cuotasPagadas){
+                break;
+            }
+            // Escribe los datos de cada cuota en el archivo.
+            if (amortizacion[i][3] < 0){
+                amortizacion[i][3] = 0;
+            }
+            archivo << amortizacion[i][0] << "\t\t" << amortizacion[i][1] << "\t\t\t\t" << amortizacion[i][2] << "\t\t\t" << amortizacion[i][3] << "\t" << endl;
+            cuotaActual = cuotaActual + 1;
+        }
+        cout << "\n¡El reporte se ha generado con éxito!" << endl;
+        archivo.close(); // Cierra el archivo
     }
-    cout << "\n¡El reporte se ha generado con éxito!" << endl;
-    archivo.close(); // Cierra el archivo
+    else{
+        cout << "No se ha hecho ningún pago a este préstamo";
+    }
 
 }
 
@@ -294,7 +314,7 @@ void Prestamos::menuReporte()
                     while (std::getline(ss, parte, ',')) {
                         partes.push_back(parte);
                     }
-                    InfoCliente informacion(std::stod(partes[3]), std::stod(partes[5]), std::stoi(partes[6]), std::stod(partes[4]));
+                    InfoCliente informacion(std::stod(partes[3]), std::stod(partes[5]), std::stoi(partes[6]));
                     amortizacion = informacion.amortizacion;
                     cuotasPagadas = std::stoi(partes[7]);
                     generarReporte("ReporteActual" + std::to_string(idPrestamoTemp) + ".txt");
@@ -320,7 +340,7 @@ void Prestamos::menuReporte()
 bool Prestamos::revisarIdPrestamo(){
     try
     {
-        cout<<"Ingrese el ID del préstamo que desea pagar: ";
+        cout<<"\nIngrese el ID del préstamo: ";
         cin>>idPrestamoTemp;
         if (std::cin.fail()){
             throw std::runtime_error("No es un dato válido para el ID");
@@ -331,7 +351,6 @@ bool Prestamos::revisarIdPrestamo(){
         while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
             if (id == idPrestamoTemp) {
                 return true;
-                cout << "Hola wfff";
             }
         }
     }
@@ -378,12 +397,12 @@ void Prestamos::prestamosAsociados()
                         partes.push_back(parte);
                     }
                     if (std::stoi(partes[8]) == 1){
-                        monedad == "Colones";
+                        monedad = "Colones";
                     }
                     else{
-                        monedad == "Dolares";
+                        monedad = "Dolares";
                     }
-                    cout << partes[0] << "\t" << partes[2]<< "\t" << std::stof(partes[3])<< "\t" << std::stof(partes[4])<< "\t" << std::stof(partes[5])<< "\t\t" << partes[6]<< "\t" << std::stof(partes[7])<< "\t" << monedad << "\t" << monedad << "\n";
+                    cout << partes[0] << "\t" << partes[2]<< "\t" << std::stof(partes[3])<< "\t" << std::stof(partes[4])<< "\t" << std::stof(partes[5])<< "\t\t" << partes[6]<< "\t" << std::stof(partes[7])<< "\t\t" << monedad << "\n";
                 }
             }
         }
@@ -584,75 +603,6 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
     }
 }
 
-
-/**
- * Permite al usuario abonar al capital de un préstamo.
- * El usuario elige entre dos métodos de pago: efectivo o transferencia.
- * Luego, ingresa el monto que desea abonar al capital.
- * Si se elige efectivo, se actualizan los datos del préstamo.
- * Si se elige transferencia, se verifica si hay saldo suficiente en la cuenta y se realiza un retiro.
- * Si la moneda del préstamo y la cuenta no coinciden, se realiza una conversión de moneda antes del retiro.
- * @param idPrestamo El ID del préstamo al que se va a abonar el capital.
- */
-void Prestamos::abonarCapital(long long int idPrestamo, CuentasAhorros& cuenta)
-{
-    cout << "\n-- Eliga el método de pago --" << endl;
-    cout << "1.Efectivo\n2.Transferencia" << endl;
-    int opcion = MenusInfoCliente::verificarEntrada(2);
-    double abono;
-    bool verificar;
-    cout << "\nDigite el monto que desea abonarle al capital: ";
-    cin >> abono;
-    switch (opcion)
-    {
-        case 1:
-            if (obtenerPagos(idPrestamo, abono)){
-                actualizarDatos(idPrestamo, 1);
-            }
-            else{
-                cout << "El préstamo ya fue cancelado";
-            }
-            break;
-
-        default:
-            if (obtenerPagos(idPrestamo, abono)){
-                if (saldoRestante > 0){
-                    // Llamar retiro con abono
-                    cuenta.verficarCantidadCuentas();
-                    cuenta.elegirCuenta();
-                    if (tipoMoneda != cuenta.tipo_moneda){
-                        abono = conversionMoneda(abono, tipoMoneda);
-                    }
-                    verificar = cuenta.retiro(abono);
-                    if (verificar == true){
-                        cuenta.actualizarDatos();
-                        std::cout << "Retiro completado" << std::endl;
-                        actualizarDatos(idPrestamo, 1);
-                    }
-                }
-                else{
-                    // Llamar retiro con abono + saldo restante
-                    cuenta.verficarCantidadCuentas();
-                    cuenta.elegirCuenta();
-                    abono = abono + saldoRestante;
-                    if (tipoMoneda != cuenta.tipo_moneda){
-                        abono = conversionMoneda(abono, tipoMoneda);
-                    }
-                    verificar = cuenta.retiro(abono);
-                    if (verificar == true){
-                        cuenta.actualizarDatos();
-                        std::cout << "Retiro completado" << std::endl;
-                        actualizarDatos(idPrestamo, 1);
-                    }
-                }
-            }
-            else{
-                cout << "El préstamo ya fue cancelado";
-            }
-            break;
-    }
-}
-
 /**
  * Procesa la opción seleccionada del menú de gestión de préstamos.
  * Dependiendo de la opción elegida, realiza diferentes acciones:
@@ -682,16 +632,8 @@ void Prestamos::procesarOpcionPrestamos()
             break;
         default:
             if(revisarIdPrestamo())
-            {
-                cout << "\n-- Tipo de pago --" << endl;
-                cout << "1.Pagar cuota\n2.Abonar al capital" << endl;
-                opcion = MenusInfoCliente::verificarEntrada(2);
-                if (opcion == 1){
-                    pagarCuota(idPrestamoTemp, cuenta);
-                }
-                else{
-                    abonarCapital(idPrestamoTemp, cuenta);
-                }
+            { 
+                pagarCuota(idPrestamoTemp, cuenta);
             }
             else{
                 cout << "No se pudo encontrar un préstamo relacionado";

@@ -45,14 +45,14 @@ class InfoCliente {
          * @param tasaInteresAnual Valor de la tasa de interés anual del préstamo.
          * @param cuotas Número de cuotas del préstamo.
          */
-        InfoCliente(double montoPrestamo, double tasaInteresAnual, int cuotas, double tipo);
+        InfoCliente(double montoPrestamo, double tasaInteresAnual, int cuotas);
 
         /**
          * @brief Calcula la amortización del préstamo.
          * 
          * @return Lista de amortizaciones para cada cuota.
          */
-        std::vector<std::vector<double>> calcularAmortizacion(double tipo);
+        std::vector<std::vector<double>> calcularAmortizacion();
 
         /**
          * @brief Método para imprimir el reporte en un archivo csv.

@@ -11,7 +11,7 @@
 #include "cuentasAhorros.hpp"
 #include "funciones.hpp"
 #include "infoCliente.hpp"
-//using namespace std;
+using namespace std;
 
 /**
  * @file prestamos.hpp
