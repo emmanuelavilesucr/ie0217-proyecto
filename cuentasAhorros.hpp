@@ -10,6 +10,7 @@
 #include <cmath>
 #include <regex>
 #include "funciones.hpp"
+#include <string>
 
 /**
  * @file cuentasAhorros.hpp
