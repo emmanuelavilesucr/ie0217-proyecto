@@ -257,12 +257,8 @@ void CDP::elegirCuenta() {
 
     archivo.close();
 
-    cout << "Ingrese el ID de su cuenta bancaria: ";
-    string numeroCuentaUsuario;
-    cin >> numeroCuentaUsuario;
-
-    if (cuentas.find(numeroCuentaUsuario) != cuentas.end()) {
-        Cuenta& cuentaUsuario = cuentas[numeroCuentaUsuario];
+    if (cuentas.find(to_string(cedula_cliente)) != cuentas.end()) {
+        Cuenta& cuentaUsuario = cuentas[to_string(cedula_cliente)];
 
         cout << "--- Cuentas de ahorro activas: --- " << endl;
         if (cuentaUsuario.colones > 0) {
@@ -281,7 +277,7 @@ void CDP::elegirCuenta() {
             cin >> montoCDP;
 
             if (montoCDP > 0) {
-                restarDinero(numeroCuentaUsuario, montoCDP, tipoCuenta, cuentas);
+                restarDinero(to_string(cedula_cliente), montoCDP, tipoCuenta, cuentas);
                 cout << "--- CDP registrado ---" << endl;
                 ingresarCDP();
 
@@ -387,7 +383,7 @@ void CDP::mostrarCDPs(){
         int interes;
 
         std::cout << std::endl;
-        std::cout << "CDPs activos: " << cedula_cliente << std::endl;
+        std::cout << "Sus CDPs activos: " << std::endl;
         std::cout << "--------------------" << std::endl;
 
         std::string linea;
@@ -411,8 +407,8 @@ void CDP::mostrarCDPs(){
 
                 // Se verifica si el ID coincide con el del cliente
                 if (id == cedula_cliente) {
-                    std::cout << "ID de cuenta: " << id << std::endl;
-                    std::cout << "Saldo: " << std::fixed << std::setprecision(0) << dinero << std::endl;  
+                    // std::cout << "ID de cuenta: " << id << std::endl;
+                    std::cout << "Monto: " << std::fixed << std::setprecision(0) << dinero << std::endl;  
                     std::cout << "Tipo de moneda: " << tipo_moneda << std::endl;
                     std::cout << "Interés: " << interes << "%" << std::endl;
                     std::cout << "Plazo: " << plazo << " meses" << std::endl;
