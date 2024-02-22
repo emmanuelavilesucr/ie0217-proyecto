@@ -41,3 +41,30 @@ double conversionMoneda(double dinero, int tipo_moneda){
         return dinero;
     }
 }
+
+/**
+ * @brief Recibe aspectos importantes sobre el trámite realizado para después guardalo en la base de datos
+ * 
+ * @param cedula 
+ * @param accion_realizada 
+ * @param dinero_involucrado 
+ * @param tipo_moneda int con el tipo de moneda usado (1 si es en colones y 2 si es dólares)
+ */
+void baseDatos(long long int cedula, std::string accion_realizada, double dinero_involucrado, int tipo_moneda){
+    std::string moneda;
+    if (tipo_moneda == 1){
+        moneda = "colones";
+    }else{
+        moneda = "dólares";
+    }
+
+    std::ofstream archivo("baseDatos.txt", std::ios::app);
+    if (archivo.is_open()) {
+        archivo << "Usuario: " << cedula << " - Acción: " << accion_realizada << " - Dinero involucrado: "
+        << std::fixed << std::setprecision(15) << dinero_involucrado << " " << moneda
+        << std::endl;
+        archivo.close();
+    } else {
+        std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
+    }
+}

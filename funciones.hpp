@@ -2,6 +2,9 @@
 #define FUNCIONES_HPP
 
 #include <iostream>
+#include <fstream>
+#include <limits>
+#include <iomanip>
 /**
  * @file funciones.hpp
  * @brief Definición de algunas funciones variadas.
@@ -26,5 +29,8 @@
 
 // Convierte de un tipo de moneda a otra
 double conversionMoneda(double dinero, int tipo_moneda);
+
+// Obtiene información sobre acciones realizadas por los clientes para guardaslas en una base de datos
+void baseDatos(long long int cedula, std::string accion_realizada, double dinero_involucrado, int tipo_moneda);
 
 #endif
