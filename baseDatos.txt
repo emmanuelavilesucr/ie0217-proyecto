@@ -11,3 +11,5 @@ Usuario: 123456789 - Acción: Se creó un nuevo préstamo (ID: 1009) - Dinero in
 Usuario: 1009 - Acción: n elegida no esta disponible. - Dinero involucrado: 177.697577356683269 dólares
 Usuario: 1009 - Acción: Se pagó la cuota del préstamo 1009 - Dinero involucrado: 177.697577356683269 dólares
 Usuario: 123456789 - Acción: Se pagó la cuota del préstamo 1009 - Dinero involucrado: 177.697577356683269 dólares
+Usuario: 123456789 - Acción: Se creó un nuevo préstamo (ID: 1010) - Dinero involucrado: 0.000000000000000 colones
+Usuario: 123456789 - Acción: Se creó un nuevo préstamo (ID: 1010) - Dinero involucrado: 700000.000000000000000 colones
