@@ -63,6 +63,7 @@ class Prestamos: public MenusInfoCliente {
     protected:
         /// @brief Variables relacioandas con los datos del préstamo
         long long int idPrestamo;
+        long long int idPrestamoOtro;
         long long int id;
         std::string nombreAsociado;
         std::string tipoPrestamo;

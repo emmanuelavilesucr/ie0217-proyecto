@@ -233,6 +233,7 @@ void Prestamos::EscribirPrestamo(std::string tipo, std::string plazo, double int
         archivo << idPrestamo << ","<< id << "," << tipo << "," << std::fixed << std::setprecision(15) << monto << "," << std::fixed << std::setprecision(15) << monto << "," << interes << "," << cuotas << "," << "0" <<  "," << moneda << std::endl;
         // Mnesaje de éxito
         cout << "\nEl nuevo préstamo se ha registrado" << endl;
+        baseDatos(id, "Se creó un nuevo préstamo (ID: "+ std::to_string(idPrestamo) + ")", monto, moneda);
         archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
@@ -305,8 +306,8 @@ void Prestamos::menuReporte()
         if (revisarIdPrestamo()){
             std::ifstream archivo_entrada("prestamos.txt");
             std::string linea;
-            while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
-                if (id == idPrestamoTemp) {
+            while (archivo_entrada >> idPrestamoOtro && std::getline(archivo_entrada, linea)) {
+                if (idPrestamoOtro == idPrestamoTemp) {
                     std::stringstream ss(linea);
                     std::string parte;
                     std::vector<std::string> partes;
@@ -348,8 +349,8 @@ bool Prestamos::revisarIdPrestamo(){
         bool encontrado = false;
         std::ifstream archivo_entrada("prestamos.txt");
         std::string linea;
-        while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
-            if (id == idPrestamoTemp) {
+        while (archivo_entrada >> idPrestamoOtro && std::getline(archivo_entrada, linea)) {
+            if (idPrestamoOtro == idPrestamoTemp) {
                 return true;
             }
         }
@@ -425,8 +426,8 @@ void Prestamos::prestamosAsociados()
 bool Prestamos::obtenerPagos(long long int idPrestamo, double pagar){
     std::ifstream archivo_entrada("prestamos.txt");
     std::string linea;
-    while (archivo_entrada >> id && std::getline(archivo_entrada, linea)) {
-        if (id == idPrestamo) {
+    while (archivo_entrada >> idPrestamoOtro && std::getline(archivo_entrada, linea)) {
+        if (idPrestamoOtro == idPrestamo) {
             std::stringstream ss(linea);
             std::string parte;
             std::vector<std::string> partes;
@@ -484,8 +485,8 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
         std::string linea;
 
 
-        while (archivo_lectura >> id && std::getline(archivo_lectura, linea)) {
-            if (id == idPrestamo){
+        while (archivo_lectura >> idPrestamoOtro && std::getline(archivo_lectura, linea)) {
+            if (idPrestamoOtro == idPrestamo){
                 std::istringstream ss(linea);
                 std::string parte;
                 std::vector<std::string> partes;
@@ -577,6 +578,7 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
                     if (verificar == true){
                         cuenta.actualizarDatos();
                         std::cout << "Retiro completado" << std::endl;
+                        baseDatos(id, "Se pagó la cuota del préstamo " + std::to_string(idPrestamo), cuotaMensual, tipoMoneda);
                         actualizarDatos(idPrestamo, 0);
                     }
                 }
@@ -592,6 +594,7 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
                     if (verificar == true){
                         cuenta.actualizarDatos();
                         std::cout << "Retiro completado" << std::endl;
+                        baseDatos(id, "Se pagó la cuota del préstamo " + std::to_string(idPrestamo), cuotaMensual, tipoMoneda);
                         actualizarDatos(idPrestamo, 0);
                     }
                 }
