@@ -156,6 +156,7 @@ void CuentasAhorros::guardarDatos(){
         archivo << this->cedula_cliente << "," << tipo_moneda << ","
         << std::fixed << std::setprecision(15) << this->dinero_cuenta << std::endl;
         archivo.close();
+        baseDatos(cedula_cliente, "Se creó una cuenta de ahorros", dinero_cuenta, tipo_moneda);
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
     }
@@ -550,6 +551,7 @@ bool CuentasAhorros::deposito(){
         return false;
     }
 
+    baseDatos(cedula_cliente, "Se ha realizado un depósito", dinero_depositado, tipo_moneda);
     dinero_cuenta = dinero_cuenta + dinero_depositado;
     return true;
 }
@@ -580,6 +582,7 @@ bool CuentasAhorros::retiro(double retirar){
             std::cout << std::endl;
             return false;
         }
+        baseDatos(cedula_cliente, "Se ha realizado un retiro", dinero_retirado, tipo_moneda);
         dinero_cuenta = dinero_cuenta - dinero_retirado;
         return true;
     }else{
@@ -705,6 +708,7 @@ bool CuentasAhorros::tranferirDineroPropia(){
             dinero_cuenta = dinero_cuenta + dinero_transferir;
             // Se actualiza dicha cuenta
             actualizarDatos();
+            baseDatos(cedula_cliente, "Se ha realizado una transferencia entre cuentas propias", dinero_transferir, tipo_moneda);
             return true;
         // Mismo proceso pero para la cuenta en dólares
         }else{
@@ -734,6 +738,7 @@ bool CuentasAhorros::tranferirDineroPropia(){
             elegirCuenta();
             dinero_cuenta = dinero_cuenta + dinero_transferir;
             actualizarDatos();
+            baseDatos(cedula_cliente, "Se ha realizado una transferencia entre cuentas propias", dinero_transferir, tipo_moneda);
             return true;
         }
     }
@@ -840,6 +845,7 @@ bool CuentasAhorros::tranferirDineroOtro(){
         }else {
             dinero_cuenta_otro = dinero_cuenta_otro + dinero_transferir;
         }
+        baseDatos(cedula_cliente, "Se ha realizado una transferencia al usuario " + std::to_string(cedula_cliente_otro), dinero_transferir, tipo_moneda_otro);
         actualizarDatos();
         return true;
 }

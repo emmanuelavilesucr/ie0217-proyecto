@@ -1,0 +1,8 @@
+Usuario: 305490706 - Acción: Se creó una cuenta de ahorros - Dinero involucrado: 90000.000000000000000 colones
+Usuario: 123456789 - Acción: Se creó una cuenta de ahorros - Dinero involucrado: 40000.000000000000000 dólares
+Usuario: 305550527 - Acción: Se creó una cuenta de ahorros - Dinero involucrado: 8000000.000000000000000 dólares
+Usuario: 305490706 - Acción: Se creó una cuenta de ahorros - Dinero involucrado: 500.000000000000000 dólares
+Usuario: 305550527 - Acción: Se ha realizado un depósito - Dinero involucrado: 7000.000000000000000 dólares
+Usuario: 123456789 - Acción: Se ha realizado un retiro - Dinero involucrado: 6758.223630000000412 dólares
+Usuario: 305490706 - Acción: Se ha realizado una transferencia entre cuentas propias - Dinero involucrado: 25713.000000000000000 colones
+Usuario: 305490706 - Acción: Se ha realizado una transferencia al usuario 305550527 - Dinero involucrado: 29.168125072920311 dólares
