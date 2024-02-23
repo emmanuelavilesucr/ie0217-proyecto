@@ -6,3 +6,5 @@ Usuario: 305490706 - Acción: Se creó una cuenta de ahorros - Dinero involucrad
 Usuario: 123456789 - Acción: Se creó un nuevo préstamo (ID: 1001) - Dinero involucrado: 60000.000000000000000 dólares
 Usuario: 305490706 - Acción: Se ha realizado una compra en efectivo de un CDP - Dinero involucrado: 80.000000000000000 dólares
 Usuario: 305490706 - Acción: Se ha realizado una compra via transferencia bancaria de un CDP - Dinero involucrado: 123.000000000000000 dólares
+Usuario: 123456789 - Acción: Se creó un nuevo préstamo (ID: 1002) - Dinero involucrado: 1000.000000000000000 colones
+Usuario: 305490706 - Acción: Se creó un nuevo préstamo (ID: 1003) - Dinero involucrado: 8000000.000000000000000 colones
