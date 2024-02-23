@@ -191,6 +191,14 @@ void CDP::restarDinero(const string& numeroCuenta, double cantidad, int tipoMone
             int tipoMonedaActual = stoi(tipoMonedaStr);
             if (cuenta == numeroCuenta && tipoMonedaActual == tipoMoneda) {
                 double saldo = stod(saldoStr);
+                if (cantidad <= 0) {
+                    cout << "Error: La cantidad de retiro debe ser mayor que cero." << endl;
+                    return;
+                }
+                if (cantidad > saldo) {
+                    cout << "Error: No hay suficiente en la cuenta." << endl;
+                    return;
+                }
                 saldo -= cantidad;
                 archivoSalida << cuenta << "," << tipoMonedaActual << "," << fixed << setprecision(15) << saldo << "\n";
                 if (tipoMonedaActual == 1) {
@@ -213,6 +221,7 @@ void CDP::restarDinero(const string& numeroCuenta, double cantidad, int tipoMone
     rename("cuentasAhorros.tmp", "cuentasAhorros.txt");
     remove("cuentasAhorros.tmp");
 }
+
 
 /**
  * @brief Solicita al usuario inicir sesion con la cuenta bancaria.
