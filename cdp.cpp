@@ -152,11 +152,11 @@ void CDP::menuTranferenciaDivisas() {
         std::cin >> opcion_transDivisa;
         switch (opcion_transDivisa) {
             case 1:
-                tipo = "Colones"; 
+                tipo = 1; 
                 elegirCuenta(); 
                 break;
             case 2:
-                tipo = "Dolares"; 
+                tipo = 2; 
                 elegirCuenta(); 
                 break;
             default:
@@ -279,6 +279,7 @@ void CDP::elegirCuenta() {
             if (montoCDP > 0) {
                 restarDinero(to_string(cedula_cliente), montoCDP, tipoCuenta, cuentas);
                 cout << "--- CDP registrado ---" << endl;
+                baseDatos(cedula_cliente, "Se ha realizado una compra via transferencia bancaria de un CDP", montoCDP, tipo);
                 ingresarCDP();
 
             } else {
@@ -308,11 +309,11 @@ void CDP::menuDivisas() {
         std::cin >> opcion_divisa;
         switch (opcion_divisa) {
             case 1:
-                tipo = "Colones"; 
+                tipo = 1; 
                 menuPlazos(); 
                 break;
             case 2:
-                tipo = "Dolares"; 
+                tipo = 2; 
                 menuPlazos(); 
                 break;
             default:
@@ -366,6 +367,7 @@ void CDP::monto() {
     std::cout << "Ingrese el monto: ";
     std::cin >> montoCDP;
     std::cout << "--- CDP registrado ---\n";
+    baseDatos(cedula_cliente, "Se ha realizado una compra en efectivo de un CDP", montoCDP, tipo);
     ingresarCDP();  // Almacena los datos ingresados por el usuario en el archivo txt
 }
 
@@ -373,12 +375,12 @@ void CDP::monto() {
  * @brief Muestra todos los CDPs activos de cada cliente.
  * Se abre y lee el archivo txt y muestra la información de los CDPs del cliente actual.
  */
-void CDP::mostrarCDPs(){
+void CDP::mostrarCDPs() {
     std::ifstream archivo_entrada("CDP.txt");
     if (archivo_entrada.is_open()) {
         long long int id;
         double dinero;
-        std::string tipo_moneda;
+        int tipo; // Variable para almacenar el tipo de moneda (1 para colones, 2 para dólares)
         int plazo;
         int interes;
 
@@ -395,21 +397,21 @@ void CDP::mostrarCDPs(){
             while (std::getline(ss, token, ',')) {
                 tokens.push_back(token);
             }
-            
-            // Se realiza un verificacion de la cantidad de tokens para procesar una linea
+
+            // Se realiza un verificación de la cantidad de tokens para procesar una línea
             if (tokens.size() >= 5) {
-                // Se realiza la conversion de tokens a los tipos
+                // Se realiza la conversión de tokens a los tipos
                 id = std::stoll(tokens[0]);
                 dinero = std::stod(tokens[1]);
                 interes = std::stoi(tokens[2]);
-                tipo_moneda = tokens[3];
+                tipo = std::stoi(tokens[3]); // Se obtiene el tipo de moneda como entero
                 plazo = std::stoi(tokens[4]);
 
                 // Se verifica si el ID coincide con el del cliente
                 if (id == cedula_cliente) {
-                    // std::cout << "ID de cuenta: " << id << std::endl;
-                    std::cout << "Monto: " << std::fixed << std::setprecision(0) << dinero << std::endl;  
-                    std::cout << "Tipo de moneda: " << tipo_moneda << std::endl;
+                    std::cout << "Monto: " << std::fixed << std::setprecision(0) << dinero << std::endl;
+                    // Se muestra el tipo de moneda según el valor numérico
+                    std::cout << "Tipo de moneda: " << ((tipo == 1) ? "Colones" : "Dolares") << std::endl;
                     std::cout << "Interés: " << interes << "%" << std::endl;
                     std::cout << "Plazo: " << plazo << " meses" << std::endl;
                     std::cout << "------------------------------" << std::endl;

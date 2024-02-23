@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <cmath>
 #include <unordered_map> // Nueva inclusión de biblioteca
+#include "funciones.hpp"
 
 using namespace std; // No recomendado en archivos de cabecera, pero lo mantendremos por simplicidad
 
@@ -51,6 +52,7 @@ class CDP {
         void menuTransferenciasPlazos();
         void menuTranferenciaDivisas();  
 
+
     private:
 
         /**
@@ -61,7 +63,7 @@ class CDP {
         double interes;
         double montoCDP;
         double plazo;
-        string tipo;
+        int tipo;
 
         // Nuevas adiciones para manipulación de cuentas bancarias
         unordered_map<string, Cuenta> cuentas; // Estructura para almacenar cuentas bancarias
