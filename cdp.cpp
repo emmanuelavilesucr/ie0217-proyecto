@@ -37,7 +37,7 @@ CDP::CDP(long long int cedula) : cedula_cliente(cedula) {} // Constructor de la 
 void CDP::ingresarCDP(){
     std::ofstream archivo("CDP.txt", std::ios::app);
     if (archivo.is_open()) {
-        archivo << cedula_cliente << "," << std::fixed << std::setprecision(0) << montoCDP << "," << interes << "," << tipo << "," << plazo << std::endl;
+        archivo << cedula_cliente << "," << std::fixed << std::setprecision(15) << montoCDP << "," << interes << "," << tipo << "," << plazo << std::endl;
         archivo.close();
     } else {
         std::cerr << "No se pudo abrir el archivo para escribir." << std::endl;
@@ -55,7 +55,7 @@ void CDP::menuPrincipal(){
     std::cout << "1. Crear CDP\n";
     std::cout << "2. Ver CDPs\n";
     std::cout << "3. Salir\n";
-    std::cout << "Ingrese una opción:\n";
+    std::cout << "Ingrese una opción: ";
     try {
         std::cin >> opcion;
 
@@ -70,6 +70,8 @@ void CDP::menuPrincipal(){
             case 3:
                 break;
             default:
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 throw std::runtime_error("La opción elegida no está disponible.");
         }
     } catch (std::exception& e) {
@@ -85,7 +87,7 @@ void CDP::menuSecundario(){
     std::cout << "\n --- Metodo de pago: ---\n";
     std::cout << "1. Efectivo\n";
     std::cout << "2. Transferencia\n";
-    std::cout << "Ingrese una opción:\n";
+    std::cout << "Ingrese una opción: ";
     try {
         std::cin >> opcion_secundaria;
         switch (opcion_secundaria) {
@@ -96,6 +98,8 @@ void CDP::menuSecundario(){
                 menuTransferenciasPlazos();
                 break;
             default:
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 throw std::runtime_error("La opción elegida no está disponible.");
         }
     } catch (std::exception& e) {
@@ -112,7 +116,7 @@ void CDP::menuTransferenciasPlazos(){
     std::cout << "1. Tres meses a 3% \n";
     std::cout << "2. Seis meses a 4% \n";
     std::cout << "3. Doce meses a 5% \n";
-    std::cout << "Ingrese una opción:\n";
+    std::cout << "Ingrese una opción: ";
     try {
         std::cin >> opcion_transPlazo;
         switch (opcion_transPlazo) {
@@ -132,6 +136,8 @@ void CDP::menuTransferenciasPlazos(){
                 menuTranferenciaDivisas();
                 break;
             default:
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 throw std::runtime_error("La opción elegida no está disponible.");
         }
     } catch (std::exception& e) {
@@ -147,7 +153,7 @@ void CDP::menuTranferenciaDivisas() {
     std::cout << "\n --- Tipo de Divisa: ---\n";
     std::cout << "1. Colones \n";
     std::cout << "2. Dólares\n";
-    std::cout << "Ingrese una opción:\n";
+    std::cout << "Ingrese una opción: ";
     try {
         std::cin >> opcion_transDivisa;
         switch (opcion_transDivisa) {
@@ -160,6 +166,8 @@ void CDP::menuTranferenciaDivisas() {
                 elegirCuenta(); 
                 break;
             default:
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 throw std::runtime_error("La opción elegida no está disponible.");
         }
     } catch (std::exception& e) {
@@ -189,7 +197,7 @@ void CDP::restarDinero(const string& numeroCuenta, double cantidad, int tipoMone
 
         if (getline(ss, cuenta, ',') && getline(ss, tipoMonedaStr, ',') && getline(ss, saldoStr, ',')) {
             int tipoMonedaActual = stoi(tipoMonedaStr);
-            if (cuenta == numeroCuenta && tipoMonedaActual == tipoMoneda) {
+            if (cuenta == numeroCuenta && tipoMonedaActual == tipoMoneda && tipo == tipoMoneda) {
                 double saldo = stod(saldoStr);
                 if (cantidad <= 0) {
                     cout << "Error: La cantidad de retiro debe ser mayor que cero." << endl;
@@ -200,6 +208,25 @@ void CDP::restarDinero(const string& numeroCuenta, double cantidad, int tipoMone
                     return;
                 }
                 saldo -= cantidad;
+                archivoSalida << cuenta << "," << tipoMonedaActual << "," << fixed << setprecision(15) << saldo << "\n";
+                if (tipoMonedaActual == 1) {
+                    cuentas[numeroCuenta].colones = saldo;
+                } else {
+                    cuentas[numeroCuenta].dolares = saldo;
+                }
+            } else if (cuenta == numeroCuenta && tipoMonedaActual == tipoMoneda && tipoMoneda != tipo){
+                double saldo = stod(saldoStr);
+                saldo = conversionMoneda(saldo, tipoMoneda);
+                if (cantidad <= 0) {
+                    cout << "Error: La cantidad de retiro debe ser mayor que cero." << endl;
+                    return;
+                }
+                if (cantidad > saldo) {
+                    cout << "Error: No hay suficiente en la cuenta." << endl;
+                    return;
+                }
+                saldo -= cantidad;
+                saldo = conversionMoneda(saldo, tipo);
                 archivoSalida << cuenta << "," << tipoMonedaActual << "," << fixed << setprecision(15) << saldo << "\n";
                 if (tipoMonedaActual == 1) {
                     cuentas[numeroCuenta].colones = saldo;
@@ -280,10 +307,20 @@ void CDP::elegirCuenta() {
         int tipoCuenta;
         cout << "Elija la cuenta con la que desea adquirir el CDP: ";
         cin >> tipoCuenta;
+        if (std::cin.fail()){
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            throw std::runtime_error("Cuenta erronea");
+        }
 
         if ((tipoCuenta == 1 && cuentaUsuario.colones > 0) || (tipoCuenta == 2 && cuentaUsuario.dolares > 0)) {
             cout << "Ingrese monto del CDP: ";
             cin >> montoCDP;
+            if (std::cin.fail()){
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                throw std::runtime_error("El monto elegido no es correcto");
+            }
 
             if (montoCDP > 0) {
                 restarDinero(to_string(cedula_cliente), montoCDP, tipoCuenta, cuentas);
@@ -313,7 +350,7 @@ void CDP::menuDivisas() {
     std::cout << "\n --- Tipo de Divisa: ---\n";
     std::cout << "1. Colones \n";
     std::cout << "2. Dólares\n";
-    std::cout << "Ingrese una opción:\n";
+    std::cout << "Ingrese una opción: ";
     try {
         std::cin >> opcion_divisa;
         switch (opcion_divisa) {
@@ -326,6 +363,8 @@ void CDP::menuDivisas() {
                 menuPlazos(); 
                 break;
             default:
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 throw std::runtime_error("La opción elegida no está disponible.");
         }
     } catch (std::exception& e) {
@@ -342,9 +381,14 @@ void CDP::menuPlazos() {
     std::cout << "1. Tres meses a 3% \n";
     std::cout << "2. Seis meses a 4% \n";
     std::cout << "3. Doce meses a 5% \n";
-    std::cout << "Ingrese una opción:\n";
+    std::cout << "Ingrese una opción: ";
     try {
         std::cin >> opcion_plazo;
+        if (std::cin.fail()){
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            throw std::runtime_error("Plazo incorrecto");
+        }
         switch (opcion_plazo) {
             case 1:
                 plazo = 3;
@@ -362,6 +406,8 @@ void CDP::menuPlazos() {
                 monto(); 
                 break;
             default:
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 throw std::runtime_error("La opción elegida no está disponible.");
         }
     } catch (std::exception& e) {
@@ -375,6 +421,11 @@ void CDP::menuPlazos() {
 void CDP::monto() {
     std::cout << "Ingrese el monto: ";
     std::cin >> montoCDP;
+    if (std::cin.fail()){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        throw std::runtime_error("El monto del CDP no es correcto");
+    }
     std::cout << "--- CDP registrado ---\n";
     baseDatos(cedula_cliente, "Se ha realizado una compra en efectivo de un CDP", montoCDP, tipo);
     ingresarCDP();  // Almacena los datos ingresados por el usuario en el archivo txt
@@ -418,7 +469,7 @@ void CDP::mostrarCDPs() {
 
                 // Se verifica si el ID coincide con el del cliente
                 if (id == cedula_cliente) {
-                    std::cout << "Monto: " << std::fixed << std::setprecision(0) << dinero << std::endl;
+                    std::cout << "Monto: " << std::fixed << std::setprecision(15) << dinero << std::endl;
                     // Se muestra el tipo de moneda según el valor numérico
                     std::cout << "Tipo de moneda: " << ((tipo == 1) ? "Colones" : "Dolares") << std::endl;
                     std::cout << "Interés: " << interes << "%" << std::endl;

@@ -26,6 +26,7 @@ void Interfaz::accionesCliente(long long int cedula){
     int opcion_accion_cliente;
     CuentasAhorros cuenta(cedula);
     Prestamos prestamo(cedula);
+    CDP cdp(cedula);
     
     
     std::cout << "---Principales tipos de acciones---" << std::endl;
@@ -47,8 +48,7 @@ void Interfaz::accionesCliente(long long int cedula){
             prestamo.procesarOpcionPrestamos();
             break;
         case 3:
-            std::cout << "Opcion 3" << std::endl;
-            std:: cout << std::endl;
+            cdp.menuPrincipal();
             break;
         case 4:
             break;

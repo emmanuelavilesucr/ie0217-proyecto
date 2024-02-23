@@ -7,6 +7,7 @@
 #include <fstream>
 #include <limits>
 #include "prestamos.hpp"
+#include "cdp.hpp"
 
 /**
  * Clase encargada de las acciones de la interfaz
