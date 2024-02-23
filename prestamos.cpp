@@ -103,6 +103,7 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
     }
     double monto;
     int moneda;
+    bool correcto = true;
 
     switch (opcion1){
         case 1:
@@ -113,15 +114,19 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
                 cout<<"Ingrese el monto del préstamo: ";
                 cin>>monto;
                 if (std::cin.fail()){
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     throw std::runtime_error("No es un dato válido para el monto");
                 }
             }
             catch(const std::exception& e){
                 /// Maneja el error lanzado
                 std::cerr << "Error: " << e.what() << std::endl;
+                correcto = false;
             }
-
-            EscribirPrestamo(prestamo.tipo, prestamo.plazos[0], prestamo.interes[0], prestamo.cuotas[0], monto, moneda);
+            if (correcto){
+                EscribirPrestamo(prestamo.tipo, prestamo.plazos[0], prestamo.interes[0], prestamo.cuotas[0], monto, moneda);
+            }
             break;
         
         case 2:
@@ -132,14 +137,19 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
                 cout<<"Ingrese el monto del préstamo: ";
                 cin>>monto;
                 if (std::cin.fail()){
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     throw std::runtime_error("No es un dato válido para el monto");
                 }
             }
             catch(const std::exception& e){
                 /// Maneja el error lanzado
                 std::cerr << "Error: " << e.what() << std::endl;
+                correcto = false;
             }
-            EscribirPrestamo(prestamo.tipo, prestamo.plazos[1], prestamo.interes[1], prestamo.cuotas[1], monto, moneda);
+            if (correcto){
+                EscribirPrestamo(prestamo.tipo, prestamo.plazos[1], prestamo.interes[1], prestamo.cuotas[1], monto, moneda);
+            }
             break;
 
         default:
@@ -150,14 +160,19 @@ void Prestamos::procesarOpcionSecun(Datos prestamo){
                 cout<<"Ingrese el monto del préstamo: ";
                 cin>>monto;
                 if (std::cin.fail()){
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     throw std::runtime_error("No es un dato válido para el monto");
                 }
             }
             catch(const std::exception& e){
                 /// Maneja el error lanzado
                 std::cerr << "Error: " << e.what() << std::endl;
+                correcto = false;
             }
-            EscribirPrestamo(prestamo.tipo, prestamo.plazos[2], prestamo.interes[2], prestamo.cuotas[2], monto, moneda);
+            if (correcto){
+                EscribirPrestamo(prestamo.tipo, prestamo.plazos[2], prestamo.interes[2], prestamo.cuotas[2], monto, moneda);
+            }
             break;
     }
 
@@ -507,7 +522,7 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
                     partes[7] = std::to_string(cuotasPagadas);
                 }
                 cambio = true;
-                archivo_escritura << id << "," << partes[1] << "," << partes[2] << "," << std::fixed << std::setprecision(15) << partes[3] << ","
+                archivo_escritura << idPrestamoOtro << "," << partes[1] << "," << partes[2] << "," << std::fixed << std::setprecision(15) << partes[3] << ","
                 << std::fixed << std::setprecision(15) << partes[4] << ","<< partes[5] << ","<< partes[6] << ","<< partes[7] << ","<< partes[8] << std::endl;
             }
             else{
@@ -518,7 +533,7 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
                 while (std::getline(ss, parte, ',')) {
                     partes.push_back(parte);
                 }
-                archivo_escritura << id << "," << partes[1] << "," << partes[2] << "," << std::fixed << std::setprecision(15) << partes[3] << ","
+                archivo_escritura << idPrestamoOtro << "," << partes[1] << "," << partes[2] << "," << std::fixed << std::setprecision(15) << partes[3] << ","
                 << std::fixed << std::setprecision(15) << partes[4] << ","<< partes[5] << ","<< partes[6] << ","<< partes[7] << ","<< partes[8] << std::endl;
             }
         
@@ -527,7 +542,7 @@ void Prestamos::actualizarDatos(long long int idPrestamo, int opc){
         archivo_escritura.close();
 
         if (cambio) {
-            cout << "\n¡Se realizó el pago correctamente!"<< endl;
+            cout << "¡Se realizó el pago correctamente!"<< endl;
             remove("prestamos.txt");
             rename("prestamos_temp.txt", "prestamos.txt");
         } else {
@@ -554,6 +569,7 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
     cout << "1.Efectivo\n2.Transferencia" << endl;
     int opcion = MenusInfoCliente::verificarEntrada(2);
     bool verificar;
+    std::string monedaescribir;
     switch (opcion)
     {
         case 1:
@@ -569,6 +585,13 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
             if (obtenerPagos(idPrestamo, 0)){
                 if (saldoRestante > 0){
                     // Hacer retiro con cuotamensual
+                    if (tipoMoneda == 1){
+                        monedaescribir = "Colones";
+                    }
+                    else{
+                        monedaescribir = "Dólares";
+                    }
+                    cout << "\nLa cuota a pagar es de: " + std::to_string(cuotaMensual) + " " + monedaescribir + "\n" ;
                     cuenta.verficarCantidadCuentas();
                     cuenta.elegirCuenta();
                     if (tipoMoneda != cuenta.tipo_moneda){
@@ -577,7 +600,6 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
                     verificar = cuenta.retiro(cuotaMensual);
                     if (verificar == true){
                         cuenta.actualizarDatos();
-                        std::cout << "Retiro completado" << std::endl;
                         baseDatos(id, "Se pagó la cuota del préstamo " + std::to_string(idPrestamo), cuotaMensual, tipoMoneda);
                         actualizarDatos(idPrestamo, 0);
                     }
@@ -585,6 +607,13 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
                 else{
                     // Hacer el retiro con:
                     cuotaMensual = cuotaMensual + saldoRestante;
+                    if (tipoMoneda == 1){
+                        monedaescribir = "Colones";
+                    }
+                    else{
+                        monedaescribir = "Dólares";
+                    }
+                    cout << "La cuota a pagar es de: " + std::to_string(cuotaMensual) + " " + monedaescribir ;
                     cuenta.verficarCantidadCuentas();
                     cuenta.elegirCuenta();
                     if (tipoMoneda != cuenta.tipo_moneda){
@@ -593,7 +622,6 @@ void Prestamos::pagarCuota(long long int idPrestamo, CuentasAhorros& cuenta)
                     verificar = cuenta.retiro(cuotaMensual);
                     if (verificar == true){
                         cuenta.actualizarDatos();
-                        std::cout << "Retiro completado" << std::endl;
                         baseDatos(id, "Se pagó la cuota del préstamo " + std::to_string(idPrestamo), cuotaMensual, tipoMoneda);
                         actualizarDatos(idPrestamo, 0);
                     }

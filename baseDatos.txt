@@ -8,3 +8,5 @@ Usuario: 305490706 - Acción: Se ha realizado una transferencia entre cuentas pr
 Usuario: 305490706 - Acción: Se ha realizado una transferencia al usuario 305550527 - Dinero involucrado: 29.168125072920311 dólares
 Usuario: 123456789 - Acción: Se creó un nuevo préstamo (ID: 1001) - Dinero involucrado: 700000.000000000000000 colones
 Usuario: 123456789 - Acción: Se pagó la cuota del préstamo 1001 - Dinero involucrado: 14.437417000613088 colones
+Usuario: 123456789 - Acción: Se creó un nuevo préstamo (ID: 1001) - Dinero involucrado: 5000.000000000000000 dólares
+Usuario: 123456789 - Acción: Se pagó la cuota del préstamo 1001 - Dinero involucrado: 870.169051067284954 dólares
